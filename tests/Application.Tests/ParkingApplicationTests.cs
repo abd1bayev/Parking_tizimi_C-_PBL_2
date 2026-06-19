@@ -10,8 +10,10 @@ namespace Application.Tests;
 
 public class ParkingApplicationTests
 {
-    private static async Task<ParkingAppServices> CreateAppAsync(string tempDir)
+    private static async Task<ParkingAppServices> CreateAppAsync(string tempDir, bool allowDemo = false)
     {
+        Environment.SetEnvironmentVariable("PARKING_NO_DEMO", allowDemo ? null : "1");
+
         var services = new ServiceCollection();
         services.AddParkingInfrastructure(tempDir);
         var provider = services.BuildServiceProvider();
@@ -94,7 +96,7 @@ public class ParkingApplicationTests
         var vehicle = app.User.AddVehicle(user.Id, "01A123BC", "Malibu", "Black").Value!;
         var zone = app.Map.GetAllZonesWithAvailability().First();
 
-        var result = app.Operator.CheckIn(admin.UserId, user.Id, vehicle.Id, "CHZ-01");
+        var result = app.Operator.CheckIn(admin.UserId, user.Id, vehicle.Id, "CHZ-A1");
 
         Assert.False(result.Succeeded);
         Assert.Contains("operator", result.Message, StringComparison.OrdinalIgnoreCase);
@@ -152,6 +154,37 @@ public class ParkingApplicationTests
     }
 
     [Fact]
+    public async Task CancelReservation_ShouldFreeSlot()
+    {
+        var app = await CreateAppAsync(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")));
+        app.Admin.BootstrapAdmin(new RegisterRequest
+        {
+            Username = "admin",
+            Password = "password123",
+            PhoneNumber = "+998901234567"
+        });
+        app.Auth.Register(new RegisterRequest
+        {
+            Username = "user1",
+            Password = "password1",
+            PhoneNumber = "+998901111111"
+        });
+
+        var user = app.Query.FindUserByUsername("user1")!;
+        var vehicle = app.User.AddVehicle(user.Id, "01A123BC", "Malibu", "Black").Value!;
+        var zone = app.Map.GetAllZonesWithAvailability().First();
+        var slot = app.Map.GetZoneSlots(zone.ZoneId, availableOnly: true).First();
+
+        var reservation = app.User.CreateReservation(
+            user.Id, vehicle.Id, zone.ZoneId, slot.Code,
+            DateTime.UtcNow.AddHours(1), DateTime.UtcNow.AddHours(3)).Value!;
+
+        var cancel = app.User.CancelReservation(user.Id, reservation.Id);
+        Assert.True(cancel.Succeeded);
+        Assert.Equal(SlotStatus.Available, app.Query.FindSlot(slot.SlotId)!.Status);
+    }
+
+    [Fact]
     public async Task Map_ShouldReturnNearbyZones()
     {
         var app = await CreateAppAsync(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")));
@@ -164,6 +197,82 @@ public class ParkingApplicationTests
 
         Assert.NotEmpty(zones);
         Assert.All(zones, zone => Assert.True(zone.AvailableSlots >= 0));
+    }
+
+    [Fact]
+    public async Task DemoSeed_ShouldCreateLargeDataset()
+    {
+        var app = await CreateAppAsync(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")), allowDemo: true);
+        Assert.True(app.Auth.HasAdmin());
+        Assert.True(app.Query.GetAllUsers().Count(u => u.Role == UserRole.User) >= 100);
+
+        var overview = app.Dashboard.GetOverview();
+        Assert.True(overview.TotalZones >= 100);
+        Assert.True(overview.TotalSlots >= 100);
+        Assert.True(overview.ActiveReservations >= 100);
+        Assert.True(overview.OpenProblems >= 100);
+        Assert.True(overview.OccupiedSlots >= 100);
+        Assert.True(app.Query.GetPayments().Count >= 100);
+    }
+
+    [Fact]
+    public async Task ProblemReport_ShouldBeStored()
+    {
+        var app = await CreateAppAsync(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")));
+        var zone = app.Map.GetAllZonesWithAvailability().First();
+        var result = app.Problems.Report(new Application.DTOs.Problems.ReportProblemRequest
+        {
+            ZoneId = zone.ZoneId,
+            Title = "Test muammo",
+            Description = "Sensor ishlamayapti"
+        });
+
+        Assert.True(result.Succeeded);
+        Assert.Single(app.Problems.GetOpenReports());
+    }
+
+    [Fact]
+    public async Task CheckOut_ShouldCalculateBilling()
+    {
+        var app = await CreateAppAsync(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")));
+        app.Admin.BootstrapAdmin(new RegisterRequest
+        {
+            Username = "admin",
+            Password = "password123",
+            PhoneNumber = "+998901234567"
+        });
+        app.Admin.CreateOperator(app.Query.FindUserByUsername("admin")!.Id, new RegisterRequest
+        {
+            Username = "operator",
+            Password = "password1",
+            PhoneNumber = "+998902222222"
+        });
+        app.Auth.Register(new RegisterRequest
+        {
+            Username = "user1",
+            Password = "password1",
+            PhoneNumber = "+998901111111"
+        });
+
+        var operatorUser = app.Query.FindUserByUsername("operator")!;
+        var user = app.Query.FindUserByUsername("user1")!;
+        var vehicle = app.User.AddVehicle(user.Id, "01A123BC", "Malibu", "Black").Value!;
+        var slot = app.Map.GetZoneSlots(app.Map.GetAllZonesWithAvailability().First().ZoneId).First(s => s.Status == SlotStatus.Available);
+
+        var session = app.Operator.CheckIn(operatorUser.Id, user.Id, vehicle.Id, slot.Code).Value!;
+        var payment = app.Operator.CheckOut(operatorUser.Id, session.Id);
+
+        Assert.True(payment.Succeeded);
+        Assert.True(payment.Value!.Amount >= 5_000m);
+    }
+
+    [Fact]
+    public async Task Dashboard_ShouldReturnOverview()
+    {
+        var app = await CreateAppAsync(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")));
+        var overview = app.Dashboard.GetOverview();
+        Assert.True(overview.TotalZones >= 6);
+        Assert.True(overview.TotalSlots >= 60);
     }
 }
 

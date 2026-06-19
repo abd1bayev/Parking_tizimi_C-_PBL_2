@@ -11,5 +11,6 @@ public class ParkingState
     public List<Reservation> Reservations { get; set; } = [];
     public List<ParkingSession> Sessions { get; set; } = [];
     public List<Payment> Payments { get; set; } = [];
+    public List<ProblemReport> ProblemReports { get; set; } = [];
     public decimal DefaultHourlyRate { get; set; } = 5_000m;
 }

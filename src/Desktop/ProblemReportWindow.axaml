@@ -1,0 +1,23 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Desktop.ProblemReportWindow"
+        Title="Muammo xabar qilish"
+        Width="460" Height="380"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False">
+    <Border Background="White" Padding="24">
+        <StackPanel Spacing="14">
+            <TextBlock Text="Muammo xabar qilish" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+            <TextBlock Text="Slot yoki hudud bilan bog'liq muammoni tasvirlang."
+                       Foreground="#64748B" TextWrapping="Wrap"/>
+            <TextBox x:Name="TitleBox" PlaceholderText="Masalan: Sensor ishlamayapti"/>
+            <TextBox x:Name="DescriptionBox" PlaceholderText="Batafsil tavsif..."
+                     AcceptsReturn="True" Height="120" TextWrapping="Wrap"/>
+            <TextBlock x:Name="ErrorText" Foreground="#DC2626"/>
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                <Button Grid.Column="1" Content="Bekor qilish" Click="Cancel_Click"/>
+                <Button Grid.Column="2" Classes="primary" Content="Yuborish" Click="Submit_Click"/>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>

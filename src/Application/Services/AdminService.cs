@@ -62,4 +62,37 @@ public sealed class AdminService : IAdminService
             ? OperationResult<AuthResult>.Success(AuthResult.FromUser(result.Value!, result.Message))
             : OperationResult<AuthResult>.Failure(result.Message);
     }
+
+    public OperationResult SetSlotStatus(Guid adminUserId, string slotCode, SlotStatus status)
+    {
+        if (!ParkingStateHelper.IsAdmin(_stateStore.State, adminUserId))
+        {
+            return OperationResult.Failure("Faqat admin slot holatini o'zgartira oladi.");
+        }
+
+        if (status is not (SlotStatus.Available or SlotStatus.OutOfService))
+        {
+            return OperationResult.Failure("Faqat Available yoki OutOfService holatlari qo'llab-quvvatlanadi.");
+        }
+
+        var slot = ParkingStateHelper.GetSlotByCode(_stateStore.State, slotCode);
+        if (slot is null)
+        {
+            return OperationResult.Failure("Slot topilmadi.");
+        }
+
+        if (status == SlotStatus.OutOfService &&
+            _stateStore.State.Sessions.Any(session => session.SlotId == slot.Id && !session.IsClosed))
+        {
+            return OperationResult.Failure("Band slotni OutOfService qilib bo'lmaydi.");
+        }
+
+        slot.Status = status;
+        if (status == SlotStatus.Available)
+        {
+            ParkingStateHelper.RecalculateSlotStatus(_stateStore.State, slot.Id);
+        }
+
+        return OperationResult.Success($"Slot {slot.Code} holati yangilandi: {status}.");
+    }
 }

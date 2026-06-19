@@ -45,6 +45,9 @@ flowchart TB
         User["UserService"]
         Profile["ProfileService"]
         Query["ParkingQueryService"]
+        Map["ParkingMapService"]
+        Dashboard["DashboardService"]
+        Problems["ProblemReportService"]
         DTOs["DTOs + Interfaces"]
     end
 
@@ -90,7 +93,10 @@ ParkingTizimi/
 │   │   ├── Common/
 │   │   ├── DTOs/
 │   │   │   ├── Auth/
-│   │   │   └── Profile/
+│   │   │   ├── Profile/
+│   │   │   ├── Map/
+│   │   │   ├── Dashboard/
+│   │   │   └── Problems/
 │   │   ├── Interfaces/
 │   │   ├── Services/
 │   │   ├── Internal/
@@ -106,6 +112,9 @@ ParkingTizimi/
 │   │
 │   ├── Desktop/                        # 4. Presentation — Desktop
 │   │   ├── MainWindow.axaml / .cs
+│   │   ├── ParkingFloorRenderer.cs
+│   │   ├── ZoneMapRenderer.cs
+│   │   ├── ProblemReportWindow.axaml
 │   │   └── App.axaml.cs
 │   │
 │   └── Console/                        # 4. Presentation — CLI (namespace: Cli)
@@ -288,12 +297,46 @@ dotnet test
 
 ### Birinchi marta ishlatish
 
+**Variant A — Demo rejim (PBL taqdimoti uchun tavsiya etiladi):**
+
+1. Eski ma'lumot bo'lsa: `rm data/parking-data.json`
+2. `./run-desktop.sh` — avtomatik: 6 hudud, 72 slot, demo foydalanuvchilar
+3. Demo hisoblar:
+
+| Rol | Login | Parol |
+|-----|-------|-------|
+| Admin | `admin` | `Admin123!` |
+| Operator | `operator` | `Operator123!` |
+| User | `demo_user` | `User123!` |
+
+**Variant B — Qo'lda sozlash:**
+
 1. Desktop yoki Console oching
 2. **Admin yarating** (username, parol, telefon)
 3. Admin sifatida login qiling → **Operator yarating**
-4. Chiqing → **User sifatida ro‘yxatdan o‘ting**
-5. User login → avtomobil qo‘shing → bron qiling
+4. Chiqing → **User sifatida ro'yxatdan o'ting**
+5. User login → avtomobil qo'shing → bron qiling
 6. Operator login → check-in / check-out
+
+---
+
+## Desktop interfeys imkoniyatlari
+
+| Bo'lim | Tavsif |
+|--------|--------|
+| **Dashboard** | Bandlik %, daromad, geo-xarita, 7 kunlik daromad grafigi |
+| **Parking joylar** | Zona pilllari, A/B/C qatorli slot grid |
+| **Bron** | Geo-qidiruv, bron bekor qilish, to'lovlar tarixi |
+| **Operator** | ComboBox orqali check-in/out |
+| **Admin** | Slot OutOfService, muammolarni yopish |
+
+---
+
+## PBL 2 — loyiha xususiyatlari
+
+- Clean Architecture, rol-based access, geo-parking (Haversine)
+- DashboardService analitika, ProblemReport workflow
+- 12 ta unit test, Avalonia 11 zamonaviy UI
 
 ---
 
@@ -334,11 +377,13 @@ dotnet test
 |---------|--------|-------|
 | 1 | Clean Architecture + rollar | ✅ Tayyor |
 | 2 | Auth + Profile | ✅ Tayyor |
-| 3 | Desktop UI (MVVM Views/ViewModels) | 🔄 Keyingi qadam |
-| 4 | SQLite migratsiyasi | 📋 Reja |
-| 5 | REST API qatlami | 📋 Reja |
-| 6 | Hisobotlar va analitika | 📋 Reja |
-| 7 | JWT token (web uchun) | 📋 Reja |
+| 3 | Desktop UI (Dashboard, xarita, parking grid) | ✅ Tayyor |
+| 4 | Analitika va hisobotlar (DashboardService) | ✅ Tayyor |
+| 5 | Muammo xabar qilish tizimi | ✅ Tayyor |
+| 6 | Demo ma'lumotlar (72 slot, 6 hudud) | ✅ Tayyor |
+| 7 | SQLite migratsiyasi | 📋 Reja |
+| 8 | REST API qatlami | 📋 Reja |
+| 9 | JWT token (web uchun) | 📋 Reja |
 
 ---
 
@@ -352,6 +397,9 @@ dotnet test
 | UserService | `Services/UserService.cs` | AddVehicle, CreateReservation, CancelReservation |
 | ProfileService | `Services/ProfileService.cs` | GetProfile, UpdateProfile, ChangePassword |
 | ParkingQueryService | `Services/ParkingQueryService.cs` | GetSlots, GetAllUsers, ... |
+| ParkingMapService | `Services/ParkingMapService.cs` | GetAllZones, SearchNearby, GetZoneSlots |
+| DashboardService | `Services/DashboardService.cs` | GetOverview (statistika, daromad) |
+| ProblemReportService | `Services/ProblemReportService.cs` | Report, GetOpenReports, Resolve |
 | ParkingStateStore | `Services/ParkingStateStore.cs` | InitializeAsync, PersistAsync |
 
 ---

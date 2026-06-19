@@ -75,15 +75,15 @@ internal static class ParkingStateHelper
 
         var templates = new[]
         {
-            ("CHZ", "Chilonzor markaz", "Chilonzor", "Chilonzor 9-mavze", 41.2856, 69.2034, 6),
-            ("YUN", "Yunusobod plaza", "Yunusobod", "Amir Temur shoh ko'chasi 95", 41.3673, 69.2878, 8),
-            ("MIR", "Mirzo Ulug'bek", "Mirzo Ulug'bek", "Milliy bog' yonida", 41.3381, 69.3344, 5),
-            ("YAK", "Yakkasaroy", "Yakkasaroy", "Shota Rustaveli ko'chasi", 41.2994, 69.2728, 6),
-            ("SER", "Sergeli savdo", "Sergeli", "Sergeli-7 mavze", 41.2200, 69.2200, 5),
-            ("UCH", "Olmazor", "Olmazor", "Universitet metro yonida", 41.3112, 69.2796, 7)
+            ("CHZ", "Chilonzor markaz", "Chilonzor", "Chilonzor 9-mavze", 41.2856, 69.2034, 3, 4),
+            ("YUN", "Yunusobod plaza", "Yunusobod", "Amir Temur shoh ko'chasi 95", 41.3673, 69.2878, 4, 4),
+            ("MIR", "Mirzo Ulug'bek", "Mirzo Ulug'bek", "Milliy bog' yonida", 41.3381, 69.3344, 3, 4),
+            ("YAK", "Yakkasaroy", "Yakkasaroy", "Shota Rustaveli ko'chasi", 41.2994, 69.2728, 3, 4),
+            ("SER", "Sergeli savdo", "Sergeli", "Sergeli-7 mavze", 41.2200, 69.2200, 2, 4),
+            ("UCH", "Olmazor", "Olmazor", "Universitet metro yonida", 41.3112, 69.2796, 3, 4)
         };
 
-        foreach (var (code, name, district, address, lat, lng, slotCount) in templates)
+        foreach (var (code, name, district, address, lat, lng, rows, cols) in templates)
         {
             var zone = new ParkingZone
             {
@@ -98,16 +98,20 @@ internal static class ParkingStateHelper
 
             state.Zones.Add(zone);
 
-            for (var number = 1; number <= slotCount; number++)
+            for (var row = 0; row < rows; row++)
             {
-                state.Slots.Add(new ParkingSlot
+                var rowLabel = (char)('A' + row);
+                for (var col = 1; col <= cols; col++)
                 {
-                    ZoneId = zone.Id,
-                    Code = $"{code}-{number:D2}",
-                    Status = SlotStatus.Available,
-                    HourlyRate = state.DefaultHourlyRate,
-                    CreatedAtUtc = clock.UtcNow
-                });
+                    state.Slots.Add(new ParkingSlot
+                    {
+                        ZoneId = zone.Id,
+                        Code = $"{code}-{rowLabel}{col}",
+                        Status = SlotStatus.Available,
+                        HourlyRate = state.DefaultHourlyRate,
+                        CreatedAtUtc = clock.UtcNow
+                    });
+                }
             }
         }
     }
