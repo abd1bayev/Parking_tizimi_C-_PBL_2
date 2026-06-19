@@ -1,0 +1,21 @@
+## Build
+bin/
+obj/
+out/
+
+## IDE
+.vs/
+.idea/
+*.user
+*.suo
+
+## Data
+data/
+*.tmp
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Logs
+*.log

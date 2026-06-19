@@ -1,0 +1,132 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Desktop.MainWindow"
+        Title="Parking Tizimi"
+        Width="1100" Height="720"
+        MinWidth="900" MinHeight="600">
+    <Grid ColumnDefinitions="260,*" Background="#F4F6F8">
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="#1E293B" Padding="20">
+            <StackPanel Spacing="12">
+                <TextBlock Text="Parking Tizimi" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                <TextBlock x:Name="UserInfoText" Text="Mehmon" Foreground="#94A3B8" TextWrapping="Wrap"/>
+                <Separator Background="#334155" Margin="0,8"/>
+                <TextBlock Text="Workflow:" Foreground="#64748B" FontSize="11"/>
+                <TextBlock Foreground="#CBD5E1" FontSize="11" TextWrapping="Wrap"
+                           Text="1. Admin yaratish&#x0a;2. Admin → Operator&#x0a;3. User ro'yxatdan o'tadi&#x0a;4. User bron qiladi&#x0a;5. Operator check-in/out"/>
+                <Button x:Name="LogoutButton" Content="Chiqish" IsVisible="False"
+                        Click="LogoutButton_Click" HorizontalAlignment="Stretch"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main content -->
+        <ScrollViewer Grid.Column="1" Padding="24">
+            <StackPanel Spacing="16">
+
+                <!-- Guest: Bootstrap + Login + Register -->
+                <Border x:Name="GuestPanel" Background="White" CornerRadius="8" Padding="20">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Kirish / Ro'yxatdan o'tish" FontSize="18" FontWeight="SemiBold"/>
+
+                        <StackPanel x:Name="BootstrapPanel" Spacing="8">
+                            <TextBlock Text="1-qadam: Birinchi admin yaratish" FontWeight="SemiBold" Foreground="#DC2626"/>
+                            <TextBox x:Name="AdminUsernameBox" PlaceholderText="Admin username"/>
+                            <TextBox x:Name="AdminPasswordBox" PlaceholderText="Parol" PasswordChar="*"/>
+                            <TextBox x:Name="AdminPhoneBox" PlaceholderText="Telefon (+998XXXXXXXXX)"/>
+                            <Button Content="Admin yaratish" Click="BootstrapAdmin_Click"/>
+                        </StackPanel>
+
+                        <Separator/>
+
+                        <TextBlock Text="Login" FontWeight="SemiBold"/>
+                        <TextBox x:Name="LoginUsernameBox" PlaceholderText="Username"/>
+                        <TextBox x:Name="LoginPasswordBox" PlaceholderText="Parol" PasswordChar="*"/>
+                        <Button Content="Kirish" Click="LoginButton_Click"/>
+
+                        <StackPanel x:Name="RegisterPanel" Spacing="8" IsVisible="False">
+                            <Separator/>
+                            <TextBlock Text="3-qadam: Foydalanuvchi ro'yxatdan o'tish" FontWeight="SemiBold"/>
+                            <TextBox x:Name="RegisterUsernameBox" PlaceholderText="Username"/>
+                            <TextBox x:Name="RegisterPasswordBox" PlaceholderText="Parol" PasswordChar="*"/>
+                            <TextBox x:Name="RegisterPhoneBox" PlaceholderText="Telefon (+998XXXXXXXXX)"/>
+                            <Button Content="Ro'yxatdan o'tish" Click="RegisterButton_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Status message -->
+                <TextBlock x:Name="StatusText" TextWrapping="Wrap" Foreground="#475569"/>
+
+                <!-- Admin panel -->
+                <Border x:Name="AdminPanel" IsVisible="False" Background="White" CornerRadius="8" Padding="20">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Admin paneli" FontSize="18" FontWeight="SemiBold"/>
+                        <TextBlock Text="2-qadam: Operator yaratish" FontWeight="SemiBold"/>
+                        <TextBox x:Name="OperatorUsernameBox" PlaceholderText="Operator username"/>
+                        <TextBox x:Name="OperatorPasswordBox" PlaceholderText="Parol" PasswordChar="*"/>
+                        <TextBox x:Name="OperatorPhoneBox" PlaceholderText="Telefon"/>
+                        <Button Content="Operator yaratish" Click="CreateOperator_Click"/>
+                        <Separator/>
+                        <Button Content="Foydalanuvchilar ro'yxati" Click="RefreshUsers_Click"/>
+                        <ListBox x:Name="UsersListBox" MaxHeight="200"/>
+                        <Button Content="Umumiy ko'rinish" Click="RefreshOverview_Click"/>
+                        <TextBlock x:Name="OverviewText" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Operator panel -->
+                <Border x:Name="OperatorPanel" IsVisible="False" Background="White" CornerRadius="8" Padding="20">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Operator paneli (5-qadam)" FontSize="18" FontWeight="SemiBold"/>
+                        <TextBlock Text="Check-in" FontWeight="SemiBold"/>
+                        <TextBox x:Name="CheckInUserIdBox" PlaceholderText="User ID"/>
+                        <TextBox x:Name="CheckInVehicleIdBox" PlaceholderText="Vehicle ID"/>
+                        <TextBox x:Name="CheckInSlotBox" PlaceholderText="Slot (A1)"/>
+                        <Button Content="Check-in" Click="CheckIn_Click"/>
+                        <Separator/>
+                        <TextBlock Text="Check-out" FontWeight="SemiBold"/>
+                        <TextBox x:Name="CheckOutSessionIdBox" PlaceholderText="Session ID"/>
+                        <Button Content="Check-out" Click="CheckOut_Click"/>
+                        <Separator/>
+                        <Button Content="Faol sessiyalar" Click="RefreshSessions_Click"/>
+                        <ListBox x:Name="SessionsListBox" MaxHeight="180"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- User panel -->
+                <Border x:Name="UserPanel" IsVisible="False" Background="White" CornerRadius="8" Padding="20">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Foydalanuvchi paneli (4-qadam)" FontSize="18" FontWeight="SemiBold"/>
+                        <TextBlock Text="Avtomobil qo'shish" FontWeight="SemiBold"/>
+                        <TextBox x:Name="PlateBox" PlaceholderText="Davlat raqami"/>
+                        <TextBox x:Name="ModelBox" PlaceholderText="Model"/>
+                        <TextBox x:Name="ColorBox" PlaceholderText="Rang"/>
+                        <Button Content="Qo'shish" Click="AddVehicle_Click"/>
+                        <Separator/>
+                        <TextBlock Text="Bron yaratish" FontWeight="SemiBold"/>
+                        <TextBox x:Name="ReservationVehicleIdBox" PlaceholderText="Vehicle ID"/>
+                        <TextBox x:Name="ReservationSlotBox" PlaceholderText="Slot (A1)"/>
+                        <Button Content="Bron qilish (+1 soat)" Click="CreateReservation_Click"/>
+                        <Button Content="Mening avtomobillarim / bronlarim" Click="RefreshUserData_Click"/>
+                        <ListBox x:Name="UserDataListBox" MaxHeight="180"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Profile (barcha rollar uchun) -->
+                <Border x:Name="ProfilePanel" IsVisible="False" Background="White" CornerRadius="8" Padding="20">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Profil" FontSize="18" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="ProfileInfoText" TextWrapping="Wrap"/>
+                        <TextBox x:Name="ProfilePhoneBox" PlaceholderText="Yangi telefon"/>
+                        <Button Content="Telefonni yangilash" Click="UpdateProfile_Click"/>
+                        <Separator/>
+                        <TextBox x:Name="CurrentPasswordBox" PlaceholderText="Joriy parol" PasswordChar="*"/>
+                        <TextBox x:Name="NewPasswordBox" PlaceholderText="Yangi parol" PasswordChar="*"/>
+                        <Button Content="Parolni o'zgartirish" Click="ChangePassword_Click"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
