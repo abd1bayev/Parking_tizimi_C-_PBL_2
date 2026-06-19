@@ -85,7 +85,7 @@ public partial class MainWindow : Window
     {
         if (_currentUser is null)
         {
-            ShowFeedback("Admin login qilishi kerak.", true);
+            ShowFeedback("Ma'mur tizimga kirishi kerak.", true);
             return;
         }
 
@@ -102,7 +102,7 @@ public partial class MainWindow : Window
     {
         if (_currentUser is null)
         {
-            ShowFeedback("User login qilishi kerak.", true);
+            ShowFeedback("Foydalanuvchi tizimga kirishi kerak.", true);
             return;
         }
 
@@ -119,7 +119,7 @@ public partial class MainWindow : Window
     {
         if (_currentUser is null)
         {
-            ShowFeedback("User login qilishi kerak.", true);
+            ShowFeedback("Foydalanuvchi tizimga kirishi kerak.", true);
             return;
         }
 
@@ -131,7 +131,7 @@ public partial class MainWindow : Window
 
         if (UserSlotComboBox.SelectedItem is not SelectionItem slotOption)
         {
-            ShowFeedback("Slot tanlang.", true);
+            ShowFeedback("Joyni tanlang.", true);
             return;
         }
 
@@ -149,13 +149,13 @@ public partial class MainWindow : Window
     {
         if (_currentUser is null)
         {
-            ShowFeedback("User login qilishi kerak.", true);
+            ShowFeedback("Foydalanuvchi tizimga kirishi kerak.", true);
             return;
         }
 
         if (UserReservationComboBox.SelectedItem is not SelectionItem reservationOption)
         {
-            ShowFeedback("Reservation tanlang.", true);
+            ShowFeedback("Bronni tanlang.", true);
             return;
         }
 
@@ -167,7 +167,7 @@ public partial class MainWindow : Window
     {
         if (_currentUser is null)
         {
-            ShowFeedback("Operator yoki admin login qilishi kerak.", true);
+            ShowFeedback("Operator yoki ma'mur tizimga kirishi kerak.", true);
             return;
         }
 
@@ -185,7 +185,7 @@ public partial class MainWindow : Window
 
         if (OperatorSlotComboBox.SelectedItem is not SelectionItem slotOption)
         {
-            ShowFeedback("Slot tanlang.", true);
+            ShowFeedback("Joyni tanlang.", true);
             return;
         }
 
@@ -197,13 +197,13 @@ public partial class MainWindow : Window
     {
         if (_currentUser is null)
         {
-            ShowFeedback("Operator yoki admin login qilishi kerak.", true);
+            ShowFeedback("Operator yoki ma'mur tizimga kirishi kerak.", true);
             return;
         }
 
         if (OperatorSessionComboBox.SelectedItem is not SelectionItem sessionOption)
         {
-            ShowFeedback("Faol session tanlang.", true);
+            ShowFeedback("Faol sessiyani tanlang.", true);
             return;
         }
 
@@ -219,7 +219,7 @@ public partial class MainWindow : Window
     private void LogoutButton_Click(object? sender, RoutedEventArgs e)
     {
         _currentUser = null;
-        ShowFeedback("Session yakunlandi.", false);
+        ShowFeedback("Sessiya yakunlandi.", false);
         RefreshUi();
     }
 
@@ -253,32 +253,32 @@ public partial class MainWindow : Window
         var reservations = _service.GetAllReservations();
         var sessions = _service.GetActiveSessions();
 
-        OverviewUsersText.Text = $"Users: {users.Count}";
-        OverviewSlotsText.Text = $"Slots: {slots.Count}";
-        OverviewReservationsText.Text = $"Reservations: {reservations.Count}";
-        OverviewSessionsText.Text = $"Active Sessions: {sessions.Count}";
+        OverviewUsersText.Text = $"Foydalanuvchilar: {users.Count}";
+        OverviewSlotsText.Text = $"Joylar: {slots.Count}";
+        OverviewReservationsText.Text = $"Bronlar: {reservations.Count}";
+        OverviewSessionsText.Text = $"Faol sessiyalar: {sessions.Count}";
 
         CardUsersText.Text = users.Count.ToString();
         CardAvailableSlotsText.Text = slots.Count(slot => slot.Status == SlotStatus.Available).ToString();
         CardSessionsText.Text = sessions.Count.ToString();
 
-        OverviewSlotsListBox.ItemsSource = slots.Select(slot => $"{slot.Code} | {slot.Status} | {slot.HourlyRate:N0} UZS").ToList();
+        OverviewSlotsListBox.ItemsSource = slots.Select(slot => $"{slot.Code} | {GetSlotStatusLabel(slot.Status)} | {slot.HourlyRate:N0} UZS").ToList();
 
         var activity = new List<string>();
         activity.AddRange(reservations.Take(4).Select(reservation =>
         {
             var slot = _service.FindSlot(reservation.SlotId);
             var user = _service.FindUser(reservation.UserId);
-            return $"Reservation | {user?.Username ?? "Unknown"} | {slot?.Code ?? "N/A"} | {reservation.Status}";
+            return $"Bron | {user?.Username ?? "Noma'lum"} | {slot?.Code ?? "Mavjud emas"} | {GetReservationStatusLabel(reservation.Status)}";
         }));
         activity.AddRange(sessions.Take(4).Select(session =>
         {
             var slot = _service.FindSlot(session.SlotId);
             var user = _service.FindUser(session.UserId);
-            return $"Session | {user?.Username ?? "Unknown"} | {slot?.Code ?? "N/A"} | {session.CheckInUtc:yyyy-MM-dd HH:mm}";
+            return $"Sessiya | {user?.Username ?? "Noma'lum"} | {slot?.Code ?? "Mavjud emas"} | {session.CheckInUtc:yyyy-MM-dd HH:mm}";
         }));
 
-        OverviewActivityListBox.ItemsSource = activity.Count > 0 ? activity : new[] { "Hozircha activity mavjud emas." };
+        OverviewActivityListBox.ItemsSource = activity.Count > 0 ? activity : new[] { "Hozircha harakatlar mavjud emas." };
     }
 
     private void RefreshSessionVisuals()
@@ -288,22 +288,22 @@ public partial class MainWindow : Window
         DashboardTabs.IsVisible = !isGuest;
         LogoutButton.IsVisible = !isGuest;
 
-        CurrentUserText.Text = $"Foydalanuvchi: {_currentUser?.Username ?? "Guest"}";
-        CurrentRoleText.Text = $"Rol: {_currentUser?.Role.ToString() ?? "Guest"}";
+        CurrentUserText.Text = $"Foydalanuvchi: {_currentUser?.Username ?? "Mehmon"}";
+        CurrentRoleText.Text = $"Rol: {GetRoleLabel(_currentUser?.Role)}";
         RoleBadgeText.Text = _currentUser?.Role switch
         {
-            UserRole.Admin => "Admin Panel",
-            UserRole.Operator => "Operator Panel",
-            UserRole.User => "User Panel",
-            _ => "Guest Mode"
+            UserRole.Admin => "Ma'mur paneli",
+            UserRole.Operator => "Operator paneli",
+            UserRole.User => "Foydalanuvchi paneli",
+            _ => "Mehmon rejimi"
         };
 
         SystemHintText.Text = _currentUser?.Role switch
         {
             UserRole.Admin => "Operator yarating va umumiy parking holatini boshqaring.",
-            UserRole.Operator => "Check-in va check-out oqimlarini bu paneldan boshqaring.",
-            UserRole.User => "Avtomobil qo'shing, reservation qiling va to'lovlarni ko'ring.",
-            _ => _service.HasAdmin() ? "Login yoki register qiling." : "Avval Create Admin orqali admin yarating."
+            UserRole.Operator => "Kirish va chiqish jarayonlarini ushbu paneldan boshqaring.",
+            UserRole.User => "Avtomobil qo'shing, bron qiling va to'lovlarni ko'ring.",
+            _ => _service.HasAdmin() ? "Tizimga kiring yoki ro'yxatdan o'ting." : "Avval ma'mur yaratish bo'limi orqali ma'mur yarating."
         };
 
         var role = _currentUser?.Role;
@@ -319,19 +319,19 @@ public partial class MainWindow : Window
         var reservations = _service.GetAllReservations();
         var sessions = _service.GetActiveSessions();
 
-        AdminUsersListBox.ItemsSource = users.Select(user => $"{user.Username} | {user.Role} | {user.PhoneNumber}").ToList();
-        AdminSlotsListBox.ItemsSource = slots.Select(slot => $"{slot.Code} | {slot.Status} | {slot.HourlyRate:N0} UZS").ToList();
+        AdminUsersListBox.ItemsSource = users.Select(user => $"{user.Username} | {GetRoleLabel(user.Role)} | {user.PhoneNumber}").ToList();
+        AdminSlotsListBox.ItemsSource = slots.Select(slot => $"{slot.Code} | {GetSlotStatusLabel(slot.Status)} | {slot.HourlyRate:N0} UZS").ToList();
         AdminReservationsListBox.ItemsSource = reservations.Select(reservation =>
         {
             var slot = _service.FindSlot(reservation.SlotId);
             var user = _service.FindUser(reservation.UserId);
-            return $"{user?.Username ?? "Unknown"} | {slot?.Code ?? "N/A"} | {reservation.Status}";
+            return $"{user?.Username ?? "Noma'lum"} | {slot?.Code ?? "Mavjud emas"} | {GetReservationStatusLabel(reservation.Status)}";
         }).ToList();
         AdminSessionsListBox.ItemsSource = sessions.Select(session =>
         {
             var slot = _service.FindSlot(session.SlotId);
             var user = _service.FindUser(session.UserId);
-            return $"{user?.Username ?? "Unknown"} | {slot?.Code ?? "N/A"} | {session.CheckInUtc:yyyy-MM-dd HH:mm}";
+            return $"{user?.Username ?? "Noma'lum"} | {slot?.Code ?? "Mavjud emas"} | {session.CheckInUtc:yyyy-MM-dd HH:mm}";
         }).ToList();
     }
 
@@ -365,7 +365,7 @@ public partial class MainWindow : Window
         {
             var user = _service.FindUser(session.UserId);
             var slot = _service.FindSlot(session.SlotId);
-            return new SelectionItem(session.Id, $"{user?.Username ?? "Unknown"} | {slot?.Code ?? "N/A"} | {session.CheckInUtc:HH:mm}");
+            return new SelectionItem(session.Id, $"{user?.Username ?? "Noma'lum"} | {slot?.Code ?? "Mavjud emas"} | {session.CheckInUtc:HH:mm}");
         }).ToList();
         OperatorSessionComboBox.ItemsSource = sessionOptions;
         if (sessionOptions.Count > 0)
@@ -373,12 +373,12 @@ public partial class MainWindow : Window
             OperatorSessionComboBox.SelectedIndex = 0;
         }
 
-        OperatorSlotsListBox.ItemsSource = _service.GetSlots().Select(slot => $"{slot.Code} | {slot.Status} | {slot.HourlyRate:N0} UZS").ToList();
+        OperatorSlotsListBox.ItemsSource = _service.GetSlots().Select(slot => $"{slot.Code} | {GetSlotStatusLabel(slot.Status)} | {slot.HourlyRate:N0} UZS").ToList();
         OperatorSessionsListBox.ItemsSource = sessions.Select(session =>
         {
             var user = _service.FindUser(session.UserId);
             var slot = _service.FindSlot(session.SlotId);
-            return $"{user?.Username ?? "Unknown"} | {slot?.Code ?? "N/A"} | {session.CheckInUtc:yyyy-MM-dd HH:mm}";
+            return $"{user?.Username ?? "Noma'lum"} | {slot?.Code ?? "Mavjud emas"} | {session.CheckInUtc:yyyy-MM-dd HH:mm}";
         }).ToList();
     }
 
@@ -440,7 +440,7 @@ public partial class MainWindow : Window
             .Select(reservation =>
             {
                 var slot = _service.FindSlot(reservation.SlotId);
-                return new SelectionItem(reservation.Id, $"{slot?.Code ?? "N/A"} | {reservation.ReservedFromUtc:MM-dd HH:mm} -> {reservation.ReservedToUtc:MM-dd HH:mm}");
+                return new SelectionItem(reservation.Id, $"{slot?.Code ?? "Mavjud emas"} | {reservation.ReservedFromUtc:MM-dd HH:mm} -> {reservation.ReservedToUtc:MM-dd HH:mm}");
             })
             .ToList();
         UserReservationComboBox.ItemsSource = reservationOptions;
@@ -457,13 +457,13 @@ public partial class MainWindow : Window
             ? reservations.Select(reservation =>
             {
                 var slot = _service.FindSlot(reservation.SlotId);
-                return $"{slot?.Code ?? "N/A"} | {reservation.Status} | {reservation.ReservedFromUtc:yyyy-MM-dd HH:mm}";
+                return $"{slot?.Code ?? "Mavjud emas"} | {GetReservationStatusLabel(reservation.Status)} | {reservation.ReservedFromUtc:yyyy-MM-dd HH:mm}";
             }).ToList()
-            : new[] { "Reservation mavjud emas." };
+            : new[] { "Bron mavjud emas." };
 
         UserPaymentsListBox.ItemsSource = payments.Count > 0
-            ? payments.Select(payment => $"{payment.Amount:N0} UZS | {payment.Status} | {payment.PaidAtUtc:yyyy-MM-dd HH:mm}").ToList()
-            : new[] { "Payment mavjud emas." };
+            ? payments.Select(payment => $"{payment.Amount:N0} UZS | {GetPaymentStatusLabel(payment.Status)} | {payment.PaidAtUtc:yyyy-MM-dd HH:mm}").ToList()
+            : new[] { "To'lov mavjud emas." };
     }
 
     private void ShowFeedback(string message, bool isError)
@@ -485,6 +485,40 @@ public partial class MainWindow : Window
         utcDateTime = default;
         return false;
     }
+
+    private static string GetRoleLabel(UserRole? role) => role switch
+    {
+        UserRole.Admin => "Ma'mur",
+        UserRole.Operator => "Operator",
+        UserRole.User => "Foydalanuvchi",
+        _ => "Mehmon"
+    };
+
+    private static string GetSlotStatusLabel(SlotStatus status) => status switch
+    {
+        SlotStatus.Available => "Bo'sh",
+        SlotStatus.Reserved => "Bron qilingan",
+        SlotStatus.Occupied => "Band",
+        SlotStatus.OutOfService => "Faol emas",
+        _ => "Noma'lum"
+    };
+
+    private static string GetReservationStatusLabel(ReservationStatus status) => status switch
+    {
+        ReservationStatus.Active => "Faol",
+        ReservationStatus.Cancelled => "Bekor qilingan",
+        ReservationStatus.Completed => "Yakunlangan",
+        ReservationStatus.Expired => "Muddati tugagan",
+        _ => "Noma'lum"
+    };
+
+    private static string GetPaymentStatusLabel(PaymentStatus status) => status switch
+    {
+        PaymentStatus.Pending => "Kutilmoqda",
+        PaymentStatus.Paid => "To'langan",
+        PaymentStatus.Cancelled => "Bekor qilingan",
+        _ => "Noma'lum"
+    };
 
     private sealed record SelectionItem(Guid Id, string Label)
     {

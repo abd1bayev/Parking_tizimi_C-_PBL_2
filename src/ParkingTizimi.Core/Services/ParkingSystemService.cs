@@ -131,7 +131,11 @@ public class ParkingSystemService
     {
         EnsureInitialized();
 
-        var normalizedUsername = NormalizeRequired(username);
+        if (!TryNormalizeRequired(username, out var normalizedUsername))
+        {
+            return OperationResult<User>.Failure("Username bo'sh bo'lmasligi kerak.");
+        }
+
         var user = _state.Users.FirstOrDefault(candidate => string.Equals(candidate.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase) && candidate.IsActive);
 
         if (user is null || !PasswordHasher.Verify(password, user.PasswordHash))
@@ -152,7 +156,22 @@ public class ParkingSystemService
             return OperationResult<Vehicle>.Failure("Foydalanuvchi topilmadi.");
         }
 
-        var normalizedPlate = NormalizeRequired(plateNumber).ToUpperInvariant();
+        if (!TryNormalizeRequired(plateNumber, out var normalizedPlate))
+        {
+            return OperationResult<Vehicle>.Failure("Davlat raqami bo'sh bo'lmasligi kerak.");
+        }
+
+        if (!TryNormalizeRequired(model, out var normalizedModel))
+        {
+            return OperationResult<Vehicle>.Failure("Model bo'sh bo'lmasligi kerak.");
+        }
+
+        if (!TryNormalizeRequired(color, out var normalizedColor))
+        {
+            return OperationResult<Vehicle>.Failure("Rang bo'sh bo'lmasligi kerak.");
+        }
+
+        normalizedPlate = normalizedPlate.ToUpperInvariant();
         if (_state.Vehicles.Any(vehicle => string.Equals(vehicle.PlateNumber, normalizedPlate, StringComparison.OrdinalIgnoreCase)))
         {
             return OperationResult<Vehicle>.Failure("Bunday davlat raqami allaqachon mavjud.");
@@ -162,8 +181,8 @@ public class ParkingSystemService
         {
             OwnerUserId = user.Id,
             PlateNumber = normalizedPlate,
-            Model = NormalizeRequired(model),
-            Color = NormalizeRequired(color),
+            Model = normalizedModel,
+            Color = normalizedColor,
             CreatedAtUtc = _clock.UtcNow
         };
 
@@ -409,7 +428,11 @@ public class ParkingSystemService
 
     public OperationResult<User> CreateUser(string username, string password, string phoneNumber, UserRole role, string successMessage)
     {
-        var normalizedUsername = NormalizeRequired(username);
+        if (!TryNormalizeRequired(username, out var normalizedUsername))
+        {
+            return OperationResult<User>.Failure("Username bo'sh bo'lmasligi kerak.");
+        }
+
         if (_state.Users.Any(user => string.Equals(user.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase)))
         {
             return OperationResult<User>.Failure("Bu username band.");
@@ -457,8 +480,25 @@ public class ParkingSystemService
 
     private ParkingSlot? GetSlotByCode(string slotCode)
     {
-        var normalizedCode = NormalizeRequired(slotCode).ToUpperInvariant();
+        if (!TryNormalizeRequired(slotCode, out var normalizedCode))
+        {
+            return null;
+        }
+
+        normalizedCode = normalizedCode.ToUpperInvariant();
         return _state.Slots.FirstOrDefault(slot => string.Equals(slot.Code, normalizedCode, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool TryNormalizeRequired(string? value, out string normalized)
+    {
+        normalized = string.Empty;
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        normalized = value.Trim();
+        return true;
     }
 
     private static string NormalizeRequired(string value)

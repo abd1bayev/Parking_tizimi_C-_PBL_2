@@ -69,6 +69,18 @@ public class ParkingSystemServiceTests
         Assert.Equal(SlotStatus.Available, service.GetSlots().First(slot => slot.Code == "A2").Status);
     }
 
+    [Fact]
+    public async Task AddVehicle_ShouldReturnFailure_WhenModelIsBlank()
+    {
+        var service = await CreateServiceAsync();
+        var user = service.RegisterUser("user1", "password1", "+998901111111").Value!;
+
+        var result = service.AddVehicle(user.Id, "01A123BC", "", "Black");
+
+        Assert.False(result.Succeeded);
+        Assert.Contains("Model", result.Message);
+    }
+
     private static async Task<ParkingSystemService> CreateServiceAsync(IClock? clock = null)
     {
         var repository = new InMemoryParkingRepository();

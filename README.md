@@ -1,285 +1,51 @@
-# Parking Tizimi - 3-Tier Role System (C# Edition)
+# Parking Tizimi
 
-Oddiy, ammo kengaytirishga tayyor konsolga yo'naltirilgan parking tizimi. Ushbu repo oldingi Python versiyasidagi yechimni to'liq va sifatli ravishda C# ekotizimiga ko'chirish uchun tayyorlanmoqda.
+Professional darajadagi parking boshqaruv tizimi. Loyiha C# va .NET 8 asosida yozilgan bo'lib, asosiy ishchi mijoz sifatida zamonaviy `Avalonia UI` ish stoli dasturidan foydalanadi. Qo'shimcha ravishda terminal asosidagi konsol varianti ham saqlangan.
 
-Loyiha markazida 3 bosqichli rol tizimi bor:
+## Loyiha Maqsadi
 
-- Admin - tizimni boshqarish va operatorlarni yaratish
-- Operator - parking jarayonlarini boshqarish
-- User - ro'yxatdan o'tish, login, bron qilish va to'lovlarni ko'rish
+Ushbu loyiha parking jarayonlarini tartibli, xavfsiz va kengaytirishga tayyor tarzda boshqarish uchun ishlab chiqilgan. Tizim quyidagi asosiy yo'nalishlarni qamrab oladi:
 
-Bu README loyihaning C# versiyasi uchun asosiy yo'nalish, arxitektura, ishga tushirish tartibi va ishlab chiqish rejasini belgilaydi.
+- rollarga asoslangan boshqaruv
+- foydalanuvchi va operator oqimlarini ajratish
+- bron, kirim va chiqim jarayonlarini nazorat qilish
+- to'lovlarni hisoblash va saqlash
+- ish stoli interfeysi orqali qulay boshqaruv
 
-## Maqsad
+## Asosiy Imkoniyatlar
 
-Python asosidagi Parking Tizimi funksionalligini C# da qayta qurish, kod bazani qatlamli arxitektura asosida yozish va keyinchalik kengaytirish uchun mustahkam poydevor yaratish.
-
-Asosiy maqsadlar:
-
-- Python versiyadagi biznes mantiqni C# ga ko'chirish
-- Rollarga asoslangan boshqaruvni saqlab qolish
-- JSON yoki keyingi bosqichda DB bilan ishlashga tayyor struktura yaratish
-- Test yozish va kodni modul ko'rinishida ajratish
-- CLI tajribasini tartibli va tushunarli qilish
-
-## Rejalashtirilgan Texnologiyalar
-
-- Language: C#
-- Platforma: .NET 8
-- App turi: Console Application
-- Data storage: boshlanishida JSON, keyinchalik SQLite yoki SQL Server ga o'tkazish mumkin
-- Testing: xUnit yoki NUnit
-- Serialization: System.Text.Json
-- Password hashing: SHA-256 yoki undan yaxshiroq variant sifatida PBKDF2
-
-## Rejalashtirilgan Asosiy Xususiyatlar
-
-- 3-Tier Role System
-- Admin yaratish va himoyalangan admin flow
-- Operator va user autentifikatsiyasi
-- Telefon raqam validatsiyasi (+998 format)
-- Parking slotlarni boshqarish
-- Avtomobil kirishi va chiqishini qayd etish
-- Bron qilish va bronni bekor qilish
-- To'lovni vaqt bo'yicha hisoblash
-- JSON orqali saqlash
-- Jadval ko'rinishidagi CLI chiqishlari
-- Unit testlar
-
-## Role Model
-
-### 1. Admin
-
-Admin odatda alohida boshqaruv oqimi orqali yaratiladi. Keyinchalik quyidagi imkoniyatlarga ega bo'ladi:
-
+- 3 rol: `Ma'mur`, `Operator`, `Foydalanuvchi`
+- birinchi ma'murni yaratish
+- foydalanuvchini ro'yxatdan o'tkazish va tizimga kiritish
 - operator yaratish
-- tizim konfiguratsiyasini ko'rish va yangilash
-- foydalanuvchilar va operatorlarni ko'rish
-- hisobotlarni olish
-
-### 2. Operator
-
-Operator parkingning kundalik ishini boshqaradi:
-
-- mashina kirishini qayd etish
-- mashina chiqishini yakunlash
-- bo'sh va band joylarni ko'rish
-- bronlar bilan ishlash
-- to'lov summasini hisoblash
-
-### 3. User
-
-Oddiy foydalanuvchi quyidagilarni bajara oladi:
-
-- ro'yxatdan o'tish
-- login qilish
-- o'z mashinasini biriktirish
-- bron qilish
-- bronni bekor qilish
-- o'z tarixini ko'rish
-
-## Tavsiya Etiladigan Arxitektura
-
-Loyihani qatlamli tarzda yozish tavsiya etiladi:
-
-```text
-ParkingTizimi/
-├── src/
-│   ├── ParkingTizimi.App/          # CLI entry point
-│   ├── ParkingTizimi.Core/         # Biznes qoidalar, servislar, interfeyslar
-│   ├── ParkingTizimi.Domain/       # Entity, enum, value object
-│   ├── ParkingTizimi.Infrastructure/ # JSON storage, repository, persistence
-│   └── ParkingTizimi.Shared/       # Umumiy helper va constantlar
-├── tests/
-│   ├── ParkingTizimi.Core.Tests/
-│   └── ParkingTizimi.Integration.Tests/
-├── docs/
-├── README.md
-└── LICENSE
-```
-
-## Domain Model Taklifi
-
-Quyidagi asosiy obyektlar kutiladi:
-
-- User
-- Operator
-- Admin
-- Vehicle
-- ParkingSlot
-- Reservation
-- ParkingSession
-- Payment
-
-Qo'shimcha enumlar:
-
-- UserRole
-- SlotStatus
-- ReservationStatus
-- PaymentStatus
-
-## Tavsiya Etiladigan Folder Darajasidagi Vazifalar
-
-### ParkingTizimi.Domain
-
-- entity classlar
-- enumlar
-- value objectlar
-- domain qoidalari
-
-### ParkingTizimi.Core
-
-- auth service
-- parking service
-- reservation service
-- payment service
-- validatorlar
-- service interfeyslari
-
-### ParkingTizimi.Infrastructure
-
-- JSON repository implementatsiyasi
-- fayl bilan ishlash
-- seed ma'lumotlar
-- config o'qish va yozish
-
-### ParkingTizimi.App
-
-- menyular
-- foydalanuvchi input handling
-- CLI navigation
-- jadval va formatlangan output
-
-## Rejalashtirilgan Menyular
-
-### Guest Menu
-
-- Register
-- Login
-- Exit
-
-### Admin Menu
-
-- Operator yaratish
-- Barcha foydalanuvchilarni ko'rish
-- Barcha parking slotlarni ko'rish
-- Hisobotlarni ko'rish
-- Logout
-
-### Operator Menu
-
-- Vehicle check-in
-- Vehicle check-out
-- Reservation list
-- Slot holatini ko'rish
-- Logout
-
-### User Menu
-
-- Profilni ko'rish
-- Vehicle qo'shish
-- Reservation yaratish
-- Reservation bekor qilish
-- To'lov tarixini ko'rish
-- Logout
-
-## Data Storage Bosqichlari
-
-### 1-bosqich
-
-JSON fayl orqali saqlash:
-
-- users.json
-- slots.json
-- reservations.json
-- sessions.json
-- payments.json
-
-### 2-bosqich
-
-Yagona data papka va generic repository.
-
-### 3-bosqich
-
-SQLite yoki SQL Server ga migratsiya qilish.
-
-## Xavfsizlik Talablari
-
-- Parollar plain text ko'rinishida saqlanmasligi kerak
-- Telefon formatlari validatsiya qilinishi kerak
-- Role-based access qat'iy tekshirilishi kerak
-- Admin yaratish oqimi alohida nazorat qilinishi kerak
-- File corruption holati uchun error handling bo'lishi kerak
-
-## Validation Qoidalari
-
-- Telefon raqam faqat +998 formatda bo'lishi kerak
-- Username bo'sh bo'lmasligi kerak
-- Parol minimal uzunlikka ega bo'lishi kerak
-- Slot band bo'lsa qayta check-in qilinmasligi kerak
-- Reservation va parking session bir-biriga zid bo'lmasligi kerak
-
-## Ishga Tushirish Rejasi
-
-Quyidagi buyruqlar loyiha yaratilgandan keyin ishlatiladi:
-
-```bash
-dotnet new sln -n ParkingTizimi
-dotnet new console -n ParkingTizimi.App -o src/ParkingTizimi.App
-dotnet new classlib -n ParkingTizimi.Core -o src/ParkingTizimi.Core
-dotnet new classlib -n ParkingTizimi.Domain -o src/ParkingTizimi.Domain
-dotnet new classlib -n ParkingTizimi.Infrastructure -o src/ParkingTizimi.Infrastructure
-dotnet new classlib -n ParkingTizimi.Shared -o src/ParkingTizimi.Shared
-dotnet new xunit -n ParkingTizimi.Core.Tests -o tests/ParkingTizimi.Core.Tests
-# Parking Tizimi - 3-Tier Role System (C# Desktop)
-
-C# va .NET 8 asosida yozilgan cross-platform desktop parking tizimi. Loyiha endi haqiqiy oynali `Avalonia UI` desktop app bilan ishlaydi va qo'shimcha ravishda console variant ham saqlangan. Tizim 3 ta rol bilan ishlaydi:
-
-- Admin
-- Operator
-- User
-
-Ma'lumotlar JSON faylga saqlanadi va bitta business layer ustida ikki xil client bor:
-
-- `ParkingTizimi.Desktop` - haqiqiy GUI desktop app
-- `ParkingTizimi.App` - console app
-
-## Xususiyatlar
-
-- 3-tier role system: `Admin`, `Operator`, `User`
-- Admin yaratish
-- User ro'yxatdan o'tishi va login
-- Operator yaratish
-- Avtomobil qo'shish
-- Parking slotlarni ko'rish
-- Bron yaratish va bekor qilish
-- Vehicle check-in va check-out
-- To'lovni soatbay hisoblash
-- `+998XXXXXXXXX` telefon validatsiyasi
-- Parolni `PBKDF2 SHA-256` bilan hash qilish
-- JSON persistence
-- xUnit testlar
+- avtomobil qo'shish
+- parking joylari holatini ko'rish
+- bron yaratish va bekor qilish
+- avtomobilni joylashtirish va chiqarish
+- to'lovni vaqt asosida hisoblash
+- JSON faylga saqlash
+- telefon raqamini `+998` formatida tekshirish
+- parolni `PBKDF2 SHA-256` asosida himoyalash
 
 ## Texnologiyalar
 
-- C#
-- .NET 8
-- Avalonia UI Desktop Application
-- Console Application
-- System.Text.Json
-- xUnit
+- `C#`
+- `.NET 8`
+- `Avalonia UI`
+- `System.Text.Json`
+- `xUnit`
 
 ## Loyiha Tuzilishi
 
 ```text
 Parking_tizimi_C-_PBL_2/
 ├── src/
-│   ├── ParkingTizimi.App/             # CLI entry point va menyular
-│   ├── ParkingTizimi.Desktop/         # Avalonia GUI desktop app
-│   ├── ParkingTizimi.Core/            # Business logic va service layer
+│   ├── ParkingTizimi.App/             # Konsol mijoz
+│   ├── ParkingTizimi.Desktop/         # Ish stoli mijoz
+│   ├── ParkingTizimi.Core/            # Biznes mantiq va servislar
 │   ├── ParkingTizimi.Domain/          # Entity va enumlar
-│   ├── ParkingTizimi.Infrastructure/  # JSON repository
-│   └── ParkingTizimi.Shared/          # Common helpers, validation, security
+│   ├── ParkingTizimi.Infrastructure/  # JSON repository va persistence
+│   └── ParkingTizimi.Shared/          # Umumiy yordamchi kodlar
 ├── tests/
 │   └── ParkingTizimi.Core.Tests/      # Unit testlar
 ├── docs/
@@ -290,26 +56,29 @@ Parking_tizimi_C-_PBL_2/
 
 ## Rollar
 
-### Admin
+### Ma'mur
 
-- tizimdagi barcha userlarni ko'radi
 - operator yaratadi
-- slotlar, bronlar va active sessionlarni ko'radi
+- foydalanuvchilarni ko'radi
+- joylar, bronlar va faol sessiyalarni kuzatadi
+- umumiy holatni boshqaradi
 
 ### Operator
 
-- foydalanuvchi transportini parkingga kiritadi
-- check-out qiladi
-- active sessionlarni va slotlarni ko'radi
+- foydalanuvchi avtomobilini joylashtiradi
+- avtomobilni chiqaradi
+- joylar holatini ko'radi
+- faol sessiyalarni boshqaradi
 
-### User
+### Foydalanuvchi
 
-- ro'yxatdan o'tadi va login qiladi
-- o'z avtomobilini qo'shadi
-- bron qiladi va bekor qiladi
-- o'z to'lov tarixini ko'radi
+- ro'yxatdan o'tadi
+- tizimga kiradi
+- avtomobil qo'shadi
+- bron yaratadi va bekor qiladi
+- to'lovlar va bronlar tarixini ko'radi
 
-## Asosiy Domain Obyektlar
+## Asosiy Obyektlar
 
 - `User`
 - `Vehicle`
@@ -320,29 +89,28 @@ Parking_tizimi_C-_PBL_2/
 
 ## Ishga Tushirish
 
-### 1. .NET 8 SDK
+### 1. .NET 8 ni tayyorlash
 
-Global `dotnet` o'rnatilgan bo'lishi kerak.
-
-Agar lokal user install ishlatilsa:
+Agar tizimda global `dotnet` bo'lmasa va lokal o'rnatish ishlatilsa:
 
 ```bash
-export PATH="$HOME/.dotnet:$PATH"
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
 ```
 
-### 2. Build
+### 2. Loyihani build qilish
 
 ```bash
 dotnet build ParkingTizimi.sln
 ```
 
-### 3. Test
+### 3. Testlarni ishga tushirish
 
 ```bash
 dotnet test ParkingTizimi.sln
 ```
 
-### 4. Desktop GUI ni ishga tushirish
+### 4. Ish stoli dasturini ishga tushirish
 
 ```bash
 chmod +x run-desktop.sh
@@ -352,12 +120,10 @@ chmod +x run-desktop.sh
 Yoki to'g'ridan-to'g'ri:
 
 ```bash
-export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="$DOTNET_ROOT:$PATH"
 dotnet run --project src/ParkingTizimi.Desktop
 ```
 
-### 5. Console variantni ishga tushirish
+### 5. Konsol dasturini ishga tushirish
 
 ```bash
 chmod +x run-console.sh
@@ -367,105 +133,165 @@ chmod +x run-console.sh
 Yoki:
 
 ```bash
-export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="$DOTNET_ROOT:$PATH"
 dotnet run --project src/ParkingTizimi.App
 ```
 
-## Boshlang'ich Foydalanish
+## Boshlang'ich Ishlatish Tartibi
 
-1. Desktop app ochilgach `Access` oynasida `Create Admin` ni tanlang.
-2. Admin yarating.
-3. Admin bilan login qiling va operator yarating.
-4. User sifatida ro'yxatdan o'ting.
-5. User panelidan avtomobil qo'shing va bron qiling.
-6. Operator panelidan check-in va check-out qiling.
+1. Ish stoli dasturini oching.
+2. Birinchi ma'murni yarating.
+3. Ma'mur sifatida tizimga kiring.
+4. Operator yarating.
+5. Foydalanuvchini ro'yxatdan o'tkazing.
+6. Foydalanuvchi avtomobil qo'shib bron yaratsin.
+7. Operator avtomobilni joylashtirish va chiqarish amallarini bajarsin.
 
-## Menyular
+## Interfeys Bo'limlari
 
-### Desktop Tabs
+### Kirish bo'limi
 
-- Access
-- Overview
-- Admin
-- Operator
-- User
+- ma'mur yaratish
+- foydalanuvchini ro'yxatdan o'tkazish
+- tizimga kirish
 
-### Guest Menu
+### Umumiy holat
 
-- Register
-- Login
-- Create Admin
-- Exit
+- foydalanuvchilar soni
+- joylar soni
+- bronlar soni
+- faol sessiyalar soni
+- so'nggi harakatlar
 
-### Admin Menu
+### Ma'mur bo'limi
 
-- Create Operator
-- View Users
-- View Slots
-- View Reservations
-- View Active Sessions
-- Logout
+- operator yaratish
+- foydalanuvchilar ro'yxati
+- joylar ro'yxati
+- bronlar ro'yxati
+- faol sessiyalar ro'yxati
 
-### Operator Menu
+### Operator bo'limi
 
-- Check In Vehicle
-- Check Out Vehicle
-- View Slots
-- View Active Sessions
-- Logout
+- avtomobilni joylashtirish
+- avtomobilni chiqarish
+- joylar jadvali
+- faol oqim
 
-### User Menu
+### Foydalanuvchi bo'limi
 
-- Add Vehicle
-- View My Vehicles
-- Create Reservation
-- Cancel Reservation
-- View My Reservations
-- View My Payments
-- Logout
+- avtomobil qo'shish
+- bron yaratish
+- bronni bekor qilish
+- mening avtomobillarim
+- mening bronlarim
+- mening to'lovlarim
 
-## Data Saqlash
+## Ma'lumotlar Saqlanishi
 
-Tizim ishga tushganda loyiha rootida `data/parking-data.json` yaratiladi.
+Tizim ishga tushganda loyiha ildizida `data/parking-data.json` fayli yaratiladi.
 
-Saqlanadigan ma'lumotlar:
+Saqlanadigan asosiy ma'lumotlar:
 
-- users
-- vehicles
-- slots
-- reservations
-- sessions
-- payments
+- foydalanuvchilar
+- avtomobillar
+- joylar
+- bronlar
+- sessiyalar
+- to'lovlar
 
 ## Xavfsizlik
 
-- Parollar ochiq matnda saqlanmaydi
-- `PBKDF2 SHA-256` hashing ishlatiladi
-- `+998` format telefon validatsiyasi mavjud
-- Role-based access qo'llangan
+- parollar ochiq matnda saqlanmaydi
+- `PBKDF2 SHA-256` ishlatiladi
+- telefon raqami `+998` formatida tekshiriladi
+- rolga asoslangan ruxsat nazorati mavjud
 
 ## Test Holati
 
-Joriy testlar:
+Hozirgi asosiy test yo'nalishlari:
 
-- admin bootstrap
-- invalid phone validation
-- reservation flow
-- checkout va payment flow
-
-Natija:
-
-```bash
-Passed: 4
-Failed: 0
-```
+- ma'mur yaratish oqimi
+- noto'g'ri telefon validatsiyasi
+- bron oqimi
+- chiqarish va to'lov oqimi
+- bo'sh maydon bilan avtomobil qo'shishdagi xatolik nazorati
 
 ## Muhim Eslatma
 
-Asosiy tavsiya etilgan client endi `ParkingTizimi.Desktop` hisoblanadi. Bu haqiqiy oynali desktop dastur bo'lib Linux, Windows va macOS da `Avalonia UI` orqali ishlaydi. `ParkingTizimi.App` esa terminalga asoslangan qo'shimcha client sifatida qoldirilgan.
+Asosiy tavsiya etilgan mijoz bu `ParkingTizimi.Desktop` loyihasi hisoblanadi. `ParkingTizimi.App` esa qo'shimcha konsol varianti sifatida saqlangan.
 
-Lokal `.NET` install (`$HOME/.dotnet`) ishlatilayotgan bo'lsa, binary'ni to'g'ridan-to'g'ri ishga tushirish uchun `DOTNET_ROOT` kerak bo'ladi. Shu sabab repo ichida `run-desktop.sh` va `run-console.sh` launcher scriptlari qo'shilgan.
+`run-desktop.sh` skripti har safar loyihaning joriy holatini ishga tushirish uchun qulay yo'l hisoblanadi. Lokal `.NET` ishlatilayotgan bo'lsa, `DOTNET_ROOT` va `PATH` to'g'ri sozlangan bo'lishi kerak.
+
+## Loyiha Yanada Mukammal Bo'lishi Uchun Variantlar
+
+Quyidagi yo'nalishlar loyihani ishlab chiqarish darajasiga yaqinlashtiradi:
+
+Batafsil amaliy yo'l xaritasi bu yerda berilgan: [docs/RIVOJLANTIRISH-YOL-XARITASI.md](/home/abd1bayev/Projects/Parking_tizimi_C-_PBL_2/docs/RIVOJLANTIRISH-YOL-XARITASI.md)
+
+### 1. Vizual uslubni premium darajaga olib chiqish
+
+- maxsus ikonalar va belgilar to'plamini qo'shish
+- kartalar va statistik bloklar uchun kuchliroq vizual ierarxiya yaratish
+- kirish va bo'limlar almashinuvida yumshoq animatsiyalar qo'shish
+- professional rang tizimi va yagona dizayn tokenlaridan foydalanish
+
+### 2. To'liq mahalliylashtirish va formatlash
+
+- sana va vaqt maydonlarini o'zbekcha foydalanish uslubiga moslash
+- son, pul va vaqt ko'rinishlarini yagona formatga o'tkazish
+- xatolik va muvaffaqiyat xabarlarini bir xil uslubda standartlashtirish
+
+### 3. Operator ish jarayonini tezlashtirish
+
+- tezkor qidiruv maydoni qo'shish
+- foydalanuvchi va avtomobilni filtrlash imkonini berish
+- faol sessiyalar bo'yicha tezkor amallar panelini yaratish
+- operator uchun bir bosqichli joylashtirish oqimini soddalashtirish
+
+### 4. Ma'mur uchun hisobot va tahlil bo'limi
+
+- kunlik tushum statistikasi
+- band va bo'sh joylar dinamikasi
+- eng faol foydalanuvchilar va eng ko'p ishlatilgan joylar
+- bronlar va real joylashtirishlar o'rtasidagi tahlil
+
+### 5. Ma'lumotlar bazasiga o'tish
+
+- JSON saqlashdan `SQLite` ga o'tish
+- keyingi bosqichda `PostgreSQL` yoki `SQL Server` qo'llash
+- ko'p foydalanuvchili ishlashga tayyor poydevor yaratish
+
+### 6. Xavfsizlikni kuchaytirish
+
+- rol bo'yicha amallar tarixini yuritish
+- audit jurnalini qo'shish
+- noto'g'ri kirish urinishlarini nazorat qilish
+- muhim amallar uchun qo'shimcha tasdiqlash kiritish
+
+### 7. Sifat nazoratini kengaytirish
+
+- ko'proq unit testlar
+- xizmatlararo integratsion testlar
+- ish stoli interfeysi uchun avtomatlashtirilgan UI testlar
+- ma'lumotlar saqlanishi va tiklanishi bo'yicha regressiya testlari
+
+### 8. Professional funksional kengaytmalar
+
+- abonement yoki tarif rejalari
+- oldindan bronni tasdiqlash mexanizmi
+- QR yoki chipta asosidagi kirim-chiqim oqimi
+- to'lov kvitansiyasi yoki eksport funksiyasi
+- mijoz va operator faoliyati bo'yicha hisobot eksporti
+
+## Tavsiya Etiladigan Keyingi Bosqichlar
+
+Agar loyiha keyingi iteratsiyada yanada kuchaytirilsa, quyidagi ketma-ketlik eng foydali bo'ladi:
+
+1. `SQLite` asosidagi saqlash qatlamiga o'tish.
+2. Ma'mur uchun hisobot va tahlil bo'limini qo'shish.
+3. Operator va foydalanuvchi oqimini tezkor qidiruv va filtrlar bilan boyitish.
+4. Ish stoli interfeysi uchun chuqurroq animatsiya va vizual yakunlash ishlarini bajarish.
+5. UI va integratsion testlarni ko'paytirish.
 
 ## License
 

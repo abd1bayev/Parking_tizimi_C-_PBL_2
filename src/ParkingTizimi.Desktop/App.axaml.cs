@@ -2,7 +2,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
+using Avalonia.Themes.Fluent;
 using ParkingTizimi.Core.Services;
 using ParkingTizimi.Infrastructure.Repositories;
 using ParkingTizimi.Shared.Time;
@@ -14,7 +15,8 @@ public partial class App : Application
     public override void Initialize()
     {
         DesktopLog.Write("App.Initialize called.");
-        AvaloniaXamlLoader.Load(this);
+        RequestedThemeVariant = ThemeVariant.Default;
+        Styles.Add(new FluentTheme());
         DesktopLog.Write("App.Initialize completed.");
     }
 
