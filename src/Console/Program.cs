@@ -277,11 +277,24 @@ internal sealed class ConsoleApp
             case "2":
                 System.Console.Write("Vehicle ID: ");
                 Guid.TryParse(System.Console.ReadLine(), out var vehicleId);
-                System.Console.Write("Slot (A1): ");
+                var zones = _app.Map.GetAllZonesWithAvailability();
+                for (var i = 0; i < zones.Count; i++)
+                {
+                    System.Console.WriteLine($"  {i + 1}. [{zones[i].District}] {zones[i].Name} — bosh: {zones[i].AvailableSlots}/{zones[i].TotalSlots}");
+                }
+                System.Console.Write("Hudud raqami: ");
+                int.TryParse(System.Console.ReadLine(), out var zoneIndex);
+                if (zoneIndex < 1 || zoneIndex > zones.Count)
+                {
+                    System.Console.WriteLine("Hudud tanlanmadi.");
+                    break;
+                }
+                var zone = zones[zoneIndex - 1];
+                System.Console.Write("Slot (CHZ-01): ");
                 var slotCode = System.Console.ReadLine() ?? string.Empty;
                 var from = DateTime.UtcNow.AddHours(1);
                 var to = from.AddHours(2);
-                var reservation = _app.User.CreateReservation(userId, vehicleId, slotCode, from, to);
+                var reservation = _app.User.CreateReservation(userId, vehicleId, zone.ZoneId, slotCode, from, to);
                 System.Console.WriteLine(reservation.Message);
                 if (reservation.Succeeded) await _app.StateStore.PersistAsync();
                 break;

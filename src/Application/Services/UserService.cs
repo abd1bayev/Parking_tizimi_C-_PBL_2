@@ -63,6 +63,7 @@ public sealed class UserService : IUserService
     public OperationResult<Reservation> CreateReservation(
         Guid userId,
         Guid vehicleId,
+        Guid zoneId,
         string slotCode,
         DateTime reservedFromUtc,
         DateTime reservedToUtc)
@@ -73,6 +74,11 @@ public sealed class UserService : IUserService
         }
 
         var state = _stateStore.State;
+        if (ParkingStateHelper.GetZoneById(state, zoneId) is null)
+        {
+            return OperationResult<Reservation>.Failure("Parking hududi topilmadi.");
+        }
+
         var vehicle = state.Vehicles.FirstOrDefault(candidate =>
             candidate.Id == vehicleId && candidate.OwnerUserId == userId);
         if (vehicle is null)
@@ -90,7 +96,7 @@ public sealed class UserService : IUserService
             return OperationResult<Reservation>.Failure("Bron vaqti o'tmishda bo'lmasligi kerak.");
         }
 
-        var slot = ParkingStateHelper.GetSlotByCode(state, slotCode);
+        var slot = ParkingStateHelper.GetSlotByCode(state, slotCode, zoneId);
         if (slot is null)
         {
             return OperationResult<Reservation>.Failure("Parking slot topilmadi.");

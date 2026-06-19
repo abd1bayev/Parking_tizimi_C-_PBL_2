@@ -92,8 +92,9 @@ public class ParkingApplicationTests
 
         var user = app.Query.FindUserByUsername("user1")!;
         var vehicle = app.User.AddVehicle(user.Id, "01A123BC", "Malibu", "Black").Value!;
+        var zone = app.Map.GetAllZonesWithAvailability().First();
 
-        var result = app.Operator.CheckIn(admin.UserId, user.Id, vehicle.Id, "A1");
+        var result = app.Operator.CheckIn(admin.UserId, user.Id, vehicle.Id, "CHZ-01");
 
         Assert.False(result.Succeeded);
         Assert.Contains("operator", result.Message, StringComparison.OrdinalIgnoreCase);
@@ -148,6 +149,21 @@ public class ParkingApplicationTests
 
         Assert.True(result.Succeeded);
         Assert.Equal("+998909999999", result.Value!.PhoneNumber);
+    }
+
+    [Fact]
+    public async Task Map_ShouldReturnNearbyZones()
+    {
+        var app = await CreateAppAsync(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")));
+        var zones = app.Map.SearchNearbyZones(new Application.DTOs.Map.NearbyZoneSearchRequest
+        {
+            Latitude = 41.2995,
+            Longitude = 69.2401,
+            RadiusKm = 5
+        });
+
+        Assert.NotEmpty(zones);
+        Assert.All(zones, zone => Assert.True(zone.AvailableSlots >= 0));
     }
 }
 

@@ -30,10 +30,10 @@ public sealed class ParkingStateStore : IParkingStateStore
 
         _state = await _repository.LoadAsync(cancellationToken).ConfigureAwait(false);
         var slotsBefore = _state.Slots.Count;
-        ParkingStateHelper.SeedSlotsIfNeeded(_state, _clock);
+        ParkingStateHelper.SeedZonesAndSlotsIfNeeded(_state, _clock);
         _isInitialized = true;
 
-        if (_state.Slots.Count > slotsBefore)
+        if (_state.Zones.Count > 0 && (_state.Slots.Count > slotsBefore || slotsBefore == 0))
         {
             await _repository.SaveAsync(_state, cancellationToken).ConfigureAwait(false);
         }

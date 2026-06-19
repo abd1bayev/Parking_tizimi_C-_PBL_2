@@ -16,6 +16,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IProfileService, ProfileService>();
         services.AddSingleton<IParkingQueryService, ParkingQueryService>();
+        services.AddSingleton<IParkingMapService, ParkingMapService>();
         services.AddSingleton<ParkingAppServices>();
 
         return services;

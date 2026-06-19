@@ -12,7 +12,8 @@ public sealed class ParkingAppServices
         IUserService user,
         IProfileService profile,
         ICurrentUserService currentUser,
-        IParkingQueryService query)
+        IParkingQueryService query,
+        IParkingMapService map)
     {
         StateStore = stateStore;
         Auth = auth;
@@ -22,6 +23,7 @@ public sealed class ParkingAppServices
         Profile = profile;
         CurrentUser = currentUser;
         Query = query;
+        Map = map;
     }
 
     public IParkingStateStore StateStore { get; }
@@ -32,4 +34,5 @@ public sealed class ParkingAppServices
     public IProfileService Profile { get; }
     public ICurrentUserService CurrentUser { get; }
     public IParkingQueryService Query { get; }
+    public IParkingMapService Map { get; }
 }
