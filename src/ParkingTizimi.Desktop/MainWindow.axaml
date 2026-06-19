@@ -1,0 +1,302 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="1440"
+        d:DesignHeight="920"
+        x:Class="ParkingTizimi.Desktop.MainWindow"
+        Title="Parking Tizimi Desktop"
+        MinWidth="1200"
+        MinHeight="820"
+        Background="#0B1020">
+    <Grid RowDefinitions="Auto,*" Background="#0B1020">
+        <Border Grid.Row="0" Padding="28" Background="#121A31">
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Parking Tizimi" FontSize="28" FontWeight="Bold" Foreground="#F8FAFC"/>
+                    <TextBlock Text="C# + Avalonia asosidagi haqiqiy desktop GUI. Admin, Operator va User uchun oynali boshqaruv paneli." Foreground="#A5B4D4" TextWrapping="Wrap" MaxWidth="900"/>
+                </StackPanel>
+                <Border Grid.Column="1" Padding="14,8" CornerRadius="999" Background="#1E293B" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <TextBlock x:Name="RoleBadgeText" Text="Guest Mode" Foreground="#7DD3FC" FontWeight="SemiBold"/>
+                </Border>
+                <TextBlock Grid.Row="1" x:Name="FeedbackText" Margin="0,14,0,0" Foreground="#F59E0B" Text="Tizim tayyor."/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="320,*" Margin="20">
+            <Border Grid.Column="0" Margin="0,0,18,0" Padding="22" CornerRadius="24" Background="#10172A">
+                <StackPanel Spacing="18">
+                    <Border Padding="18" CornerRadius="20" Background="#172033">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Session" FontSize="20" FontWeight="Bold" Foreground="#E2E8F0"/>
+                            <TextBlock x:Name="CurrentUserText" Text="Foydalanuvchi: Guest" Foreground="#CBD5E1"/>
+                            <TextBlock x:Name="CurrentRoleText" Text="Rol: Guest" Foreground="#CBD5E1"/>
+                            <TextBlock x:Name="SystemHintText" Text="Avval admin yarating yoki login qiling." Foreground="#94A3B8" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="18" CornerRadius="20" Background="#172033">
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="Overview" FontSize="20" FontWeight="Bold" Foreground="#E2E8F0"/>
+                            <TextBlock x:Name="OverviewUsersText" Text="Users: 0" Foreground="#7DD3FC"/>
+                            <TextBlock x:Name="OverviewSlotsText" Text="Slots: 0" Foreground="#86EFAC"/>
+                            <TextBlock x:Name="OverviewReservationsText" Text="Reservations: 0" Foreground="#FDE68A"/>
+                            <TextBlock x:Name="OverviewSessionsText" Text="Active Sessions: 0" Foreground="#FCA5A5"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="18" CornerRadius="20" Background="#172033">
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="Flow" FontSize="20" FontWeight="Bold" Foreground="#E2E8F0"/>
+                            <TextBlock Text="1. Admin yarating" Foreground="#CBD5E1"/>
+                            <TextBlock Text="2. Operator yarating" Foreground="#CBD5E1"/>
+                            <TextBlock Text="3. User ro'yxatdan o'tadi" Foreground="#CBD5E1"/>
+                            <TextBlock Text="4. Reservation va check-in/out" Foreground="#CBD5E1"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Button x:Name="LogoutButton" Content="Logout" Click="LogoutButton_Click" Height="46" Background="#7C2D12" Foreground="White" IsVisible="False"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Padding="22" CornerRadius="24" Background="#F8FAFC">
+                <Grid>
+                    <TabControl x:Name="GuestTabs">
+                        <TabItem Header="Create Admin">
+                            <ScrollViewer>
+                                <Grid Margin="8" ColumnDefinitions="1.2*,*" ColumnSpacing="22">
+                                    <Border Padding="24" CornerRadius="24" Background="#E0F2FE">
+                                        <StackPanel Spacing="14">
+                                            <TextBlock Text="Birinchi Admin" FontSize="26" FontWeight="Bold" Foreground="#0F172A"/>
+                                            <TextBlock Text="Tizimni birinchi ishga tushirganda admin account yaratish shu yerdan amalga oshiriladi." Foreground="#334155" TextWrapping="Wrap"/>
+                                            <TextBox x:Name="AdminUsernameTextBox" PlaceholderText="Admin username"/>
+                                            <TextBox x:Name="AdminPasswordTextBox" PlaceholderText="Admin password"/>
+                                            <TextBox x:Name="AdminPhoneTextBox" PlaceholderText="+998901234567"/>
+                                            <Button Content="Create Admin" Click="CreateAdminButton_Click" Height="46" Background="#0F766E" Foreground="White"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="1" Padding="24" CornerRadius="24" Background="#0F172A">
+                                        <StackPanel Spacing="12">
+                                            <TextBlock Text="Nega admin kerak?" FontSize="22" FontWeight="Bold" Foreground="#F8FAFC"/>
+                                            <TextBlock Text="Admin desktop panelning boshqaruv markazi. U operator accountlar yaratadi va parking holatini monitoring qiladi." Foreground="#CBD5E1" TextWrapping="Wrap"/>
+                                            <TextBlock Text="Tavsiya: kuchli parol va to'g'ri +998 formatdagi raqamdan foydalaning." Foreground="#7DD3FC" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </ScrollViewer>
+                        </TabItem>
+
+                        <TabItem Header="Register User">
+                            <Border Margin="8" Padding="24" CornerRadius="24" Background="#ECFDF5">
+                                <StackPanel Spacing="14" MaxWidth="520">
+                                    <TextBlock Text="Yangi Foydalanuvchi" FontSize="26" FontWeight="Bold" Foreground="#052E16"/>
+                                    <TextBox x:Name="RegisterUsernameTextBox" PlaceholderText="Username"/>
+                                    <TextBox x:Name="RegisterPasswordTextBox" PlaceholderText="Password"/>
+                                    <TextBox x:Name="RegisterPhoneTextBox" PlaceholderText="+998901234567"/>
+                                    <Button Content="Register" Click="RegisterButton_Click" Height="46" Background="#15803D" Foreground="White"/>
+                                </StackPanel>
+                            </Border>
+                        </TabItem>
+
+                        <TabItem Header="Login">
+                            <Border Margin="8" Padding="24" CornerRadius="24" Background="#FEF3C7">
+                                <StackPanel Spacing="14" MaxWidth="520">
+                                    <TextBlock Text="Tizimga Kirish" FontSize="26" FontWeight="Bold" Foreground="#78350F"/>
+                                    <TextBox x:Name="LoginUsernameTextBox" PlaceholderText="Username"/>
+                                    <TextBox x:Name="LoginPasswordTextBox" PlaceholderText="Password"/>
+                                    <Button Content="Login" Click="LoginButton_Click" Height="46" Background="#B45309" Foreground="White"/>
+                                </StackPanel>
+                            </Border>
+                        </TabItem>
+                    </TabControl>
+
+                    <TabControl x:Name="DashboardTabs" IsVisible="False">
+                        <TabItem Header="Overview">
+                            <ScrollViewer>
+                                <StackPanel Spacing="18" Margin="8">
+                                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="18">
+                                        <Border Padding="18" CornerRadius="22" Background="#DBEAFE">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="Total Users" Foreground="#1E3A8A"/>
+                                                <TextBlock x:Name="CardUsersText" Text="0" FontSize="30" FontWeight="Bold" Foreground="#172554"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="1" Padding="18" CornerRadius="22" Background="#DCFCE7">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="Available Slots" Foreground="#166534"/>
+                                                <TextBlock x:Name="CardAvailableSlotsText" Text="0" FontSize="30" FontWeight="Bold" Foreground="#14532D"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="2" Padding="18" CornerRadius="22" Background="#FCE7F3">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="Active Sessions" Foreground="#9D174D"/>
+                                                <TextBlock x:Name="CardSessionsText" Text="0" FontSize="30" FontWeight="Bold" Foreground="#831843"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="18">
+                                        <Border Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="Slot Snapshot" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="OverviewSlotsListBox" Height="260"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="1" Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="Recent Activity" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="OverviewActivityListBox" Height="260"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+
+                        <TabItem x:Name="AdminTab" Header="Admin">
+                            <ScrollViewer>
+                                <StackPanel Spacing="18" Margin="8">
+                                    <Border Padding="20" CornerRadius="22" Background="#EFF6FF">
+                                        <StackPanel Spacing="12" MaxWidth="620">
+                                            <TextBlock Text="Operator Yaratish" FontSize="22" FontWeight="Bold" Foreground="#1E3A8A"/>
+                                            <TextBox x:Name="OperatorUsernameTextBox" PlaceholderText="Operator username"/>
+                                            <TextBox x:Name="OperatorPasswordTextBox" PlaceholderText="Operator password"/>
+                                            <TextBox x:Name="OperatorPhoneTextBox" PlaceholderText="+998901234567"/>
+                                            <Button Content="Create Operator" Click="CreateOperatorButton_Click" Height="44" Background="#1D4ED8" Foreground="White" HorizontalAlignment="Left" Width="180"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="18" RowDefinitions="Auto,Auto" RowSpacing="18">
+                                        <Border Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="Users" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="AdminUsersListBox" Height="220"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="1" Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="Slots" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="AdminSlotsListBox" Height="220"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Row="1" Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="Reservations" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="AdminReservationsListBox" Height="220"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Row="1" Grid.Column="1" Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="Active Sessions" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="AdminSessionsListBox" Height="220"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+
+                        <TabItem x:Name="OperatorTab" Header="Operator">
+                            <ScrollViewer>
+                                <StackPanel Spacing="18" Margin="8">
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="18">
+                                        <Border Padding="20" CornerRadius="22" Background="#EFF6FF">
+                                            <StackPanel Spacing="12">
+                                                <TextBlock Text="Check-In" FontSize="22" FontWeight="Bold" Foreground="#1E3A8A"/>
+                                                <ComboBox x:Name="OperatorUserComboBox" SelectionChanged="OperatorUserComboBox_SelectionChanged"/>
+                                                <ComboBox x:Name="OperatorVehicleComboBox"/>
+                                                <ComboBox x:Name="OperatorSlotComboBox"/>
+                                                <Button Content="Check In Vehicle" Click="CheckInButton_Click" Height="44" Background="#2563EB" Foreground="White" HorizontalAlignment="Left" Width="180"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Grid.Column="1" Padding="20" CornerRadius="22" Background="#FEF3C7">
+                                            <StackPanel Spacing="12">
+                                                <TextBlock Text="Check-Out" FontSize="22" FontWeight="Bold" Foreground="#92400E"/>
+                                                <ComboBox x:Name="OperatorSessionComboBox"/>
+                                                <Button Content="Check Out Vehicle" Click="CheckOutButton_Click" Height="44" Background="#D97706" Foreground="White" HorizontalAlignment="Left" Width="190"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="18">
+                                        <Border Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="Slot Holati" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="OperatorSlotsListBox" Height="280"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="1" Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="Faol Sessionlar" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="OperatorSessionsListBox" Height="280"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+
+                        <TabItem x:Name="UserTab" Header="User">
+                            <ScrollViewer>
+                                <StackPanel Spacing="18" Margin="8">
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="18">
+                                        <Border Padding="20" CornerRadius="22" Background="#ECFDF5">
+                                            <StackPanel Spacing="12">
+                                                <TextBlock Text="Avtomobil Qo'shish" FontSize="22" FontWeight="Bold" Foreground="#166534"/>
+                                                <TextBox x:Name="VehiclePlateTextBox" PlaceholderText="01A123BC"/>
+                                                <TextBox x:Name="VehicleModelTextBox" PlaceholderText="Model"/>
+                                                <TextBox x:Name="VehicleColorTextBox" PlaceholderText="Color"/>
+                                                <Button Content="Add Vehicle" Click="AddVehicleButton_Click" Height="44" Background="#15803D" Foreground="White" HorizontalAlignment="Left" Width="160"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="1" Padding="20" CornerRadius="22" Background="#F5F3FF">
+                                            <StackPanel Spacing="12">
+                                                <TextBlock Text="Bron Yaratish" FontSize="22" FontWeight="Bold" Foreground="#6D28D9"/>
+                                                <ComboBox x:Name="UserVehicleComboBox"/>
+                                                <ComboBox x:Name="UserSlotComboBox"/>
+                                                <TextBox x:Name="ReservationStartTextBox" PlaceholderText="2026-06-19 14:00"/>
+                                                <TextBox x:Name="ReservationEndTextBox" PlaceholderText="2026-06-19 16:00"/>
+                                                <Button Content="Create Reservation" Click="CreateReservationButton_Click" Height="44" Background="#7C3AED" Foreground="White" HorizontalAlignment="Left" Width="190"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+
+                                    <Border Padding="20" CornerRadius="22" Background="#FFF7ED">
+                                        <StackPanel Spacing="12">
+                                            <TextBlock Text="Bronni Bekor Qilish" FontSize="22" FontWeight="Bold" Foreground="#9A3412"/>
+                                            <ComboBox x:Name="UserReservationComboBox"/>
+                                            <Button Content="Cancel Reservation" Click="CancelReservationButton_Click" Height="44" Background="#C2410C" Foreground="White" HorizontalAlignment="Left" Width="190"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="18">
+                                        <Border Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="My Vehicles" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="UserVehiclesListBox" Height="240"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="1" Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="My Reservations" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="UserReservationsListBox" Height="240"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border Grid.Column="2" Padding="18" CornerRadius="22" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1">
+                                            <StackPanel Spacing="10">
+                                                <TextBlock Text="My Payments" FontSize="20" FontWeight="Bold" Foreground="#0F172A"/>
+                                                <ListBox x:Name="UserPaymentsListBox" Height="240"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

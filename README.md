@@ -231,15 +231,18 @@ dotnet new classlib -n ParkingTizimi.Domain -o src/ParkingTizimi.Domain
 dotnet new classlib -n ParkingTizimi.Infrastructure -o src/ParkingTizimi.Infrastructure
 dotnet new classlib -n ParkingTizimi.Shared -o src/ParkingTizimi.Shared
 dotnet new xunit -n ParkingTizimi.Core.Tests -o tests/ParkingTizimi.Core.Tests
-# Parking Tizimi - 3-Tier Role System (C#)
+# Parking Tizimi - 3-Tier Role System (C# Desktop)
 
-C# va .NET 8 asosida yozilgan cross-platform console desktop parking tizimi. Loyiha 3 ta rol bilan ishlaydi:
+C# va .NET 8 asosida yozilgan cross-platform desktop parking tizimi. Loyiha endi haqiqiy oynali `Avalonia UI` desktop app bilan ishlaydi va qo'shimcha ravishda console variant ham saqlangan. Tizim 3 ta rol bilan ishlaydi:
 
 - Admin
 - Operator
 - User
 
-Tizim terminal orqali boshqariladi, ma'lumotlar esa JSON faylga saqlanadi.
+Ma'lumotlar JSON faylga saqlanadi va bitta business layer ustida ikki xil client bor:
+
+- `ParkingTizimi.Desktop` - haqiqiy GUI desktop app
+- `ParkingTizimi.App` - console app
 
 ## Xususiyatlar
 
@@ -261,6 +264,7 @@ Tizim terminal orqali boshqariladi, ma'lumotlar esa JSON faylga saqlanadi.
 
 - C#
 - .NET 8
+- Avalonia UI Desktop Application
 - Console Application
 - System.Text.Json
 - xUnit
@@ -271,6 +275,7 @@ Tizim terminal orqali boshqariladi, ma'lumotlar esa JSON faylga saqlanadi.
 Parking_tizimi_C-_PBL_2/
 ├── src/
 │   ├── ParkingTizimi.App/             # CLI entry point va menyular
+│   ├── ParkingTizimi.Desktop/         # Avalonia GUI desktop app
 │   ├── ParkingTizimi.Core/            # Business logic va service layer
 │   ├── ParkingTizimi.Domain/          # Entity va enumlar
 │   ├── ParkingTizimi.Infrastructure/  # JSON repository
@@ -337,22 +342,54 @@ dotnet build ParkingTizimi.sln
 dotnet test ParkingTizimi.sln
 ```
 
-### 4. Dasturni ishga tushirish
+### 4. Desktop GUI ni ishga tushirish
 
 ```bash
+chmod +x run-desktop.sh
+./run-desktop.sh
+```
+
+Yoki to'g'ridan-to'g'ri:
+
+```bash
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
+dotnet run --project src/ParkingTizimi.Desktop
+```
+
+### 5. Console variantni ishga tushirish
+
+```bash
+chmod +x run-console.sh
+./run-console.sh
+```
+
+Yoki:
+
+```bash
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$DOTNET_ROOT:$PATH"
 dotnet run --project src/ParkingTizimi.App
 ```
 
 ## Boshlang'ich Foydalanish
 
-1. Dastur ochilgach `Create Admin` ni tanlang.
+1. Desktop app ochilgach `Access` oynasida `Create Admin` ni tanlang.
 2. Admin yarating.
 3. Admin bilan login qiling va operator yarating.
 4. User sifatida ro'yxatdan o'ting.
-5. User menyusidan avtomobil qo'shing va bron qiling.
-6. Operator menyusidan check-in va check-out qiling.
+5. User panelidan avtomobil qo'shing va bron qiling.
+6. Operator panelidan check-in va check-out qiling.
 
 ## Menyular
+
+### Desktop Tabs
+
+- Access
+- Overview
+- Admin
+- Operator
+- User
 
 ### Guest Menu
 
@@ -426,7 +463,9 @@ Failed: 0
 
 ## Muhim Eslatma
 
-Bu versiya `console desktop app` hisoblanadi. Ya'ni u GUI emas, terminal ichida ishlaydi. Keyingi bosqichda xohlasangiz shu business layer ustiga `WPF`, `WinForms` yoki `Avalonia UI` bilan haqiqiy oynali desktop interfeys ham qurish mumkin.
+Asosiy tavsiya etilgan client endi `ParkingTizimi.Desktop` hisoblanadi. Bu haqiqiy oynali desktop dastur bo'lib Linux, Windows va macOS da `Avalonia UI` orqali ishlaydi. `ParkingTizimi.App` esa terminalga asoslangan qo'shimcha client sifatida qoldirilgan.
+
+Lokal `.NET` install (`$HOME/.dotnet`) ishlatilayotgan bo'lsa, binary'ni to'g'ridan-to'g'ri ishga tushirish uchun `DOTNET_ROOT` kerak bo'ladi. Shu sabab repo ichida `run-desktop.sh` va `run-console.sh` launcher scriptlari qo'shilgan.
 
 ## License
 
