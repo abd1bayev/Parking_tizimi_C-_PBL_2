@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ParkingTizimi.Core\ParkingTizimi.Core.csproj" />
+    <ProjectReference Include="..\ParkingTizimi.Infrastructure\ParkingTizimi.Infrastructure.csproj" />
+    <ProjectReference Include="..\ParkingTizimi.Shared\ParkingTizimi.Shared.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

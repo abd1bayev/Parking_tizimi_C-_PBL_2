@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1A55D9C6-C224-41DC-8B70-E3013ACA1701}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingTizimi.App", "src\ParkingTizimi.App\ParkingTizimi.App.csproj", "{DBF167F7-7A6B-443E-BF17-E7D9AD70AFB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingTizimi.Core", "src\ParkingTizimi.Core\ParkingTizimi.Core.csproj", "{1D1D4CD9-6291-40B3-9D4F-FE32A807CACB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingTizimi.Domain", "src\ParkingTizimi.Domain\ParkingTizimi.Domain.csproj", "{76A12672-6C95-4C88-B941-B389B62E7542}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingTizimi.Infrastructure", "src\ParkingTizimi.Infrastructure\ParkingTizimi.Infrastructure.csproj", "{4F629EB6-7ABD-4AC6-A25B-F6B75FCB59C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingTizimi.Shared", "src\ParkingTizimi.Shared\ParkingTizimi.Shared.csproj", "{5606192B-6895-489F-A865-7F9B99B970A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{375C99BF-E97C-4E48-802E-B14546EEF971}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkingTizimi.Core.Tests", "tests\ParkingTizimi.Core.Tests\ParkingTizimi.Core.Tests.csproj", "{9A37DED0-DDF3-4EDC-93C4-F5F766974265}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBF167F7-7A6B-443E-BF17-E7D9AD70AFB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBF167F7-7A6B-443E-BF17-E7D9AD70AFB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBF167F7-7A6B-443E-BF17-E7D9AD70AFB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBF167F7-7A6B-443E-BF17-E7D9AD70AFB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D1D4CD9-6291-40B3-9D4F-FE32A807CACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D1D4CD9-6291-40B3-9D4F-FE32A807CACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D1D4CD9-6291-40B3-9D4F-FE32A807CACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D1D4CD9-6291-40B3-9D4F-FE32A807CACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76A12672-6C95-4C88-B941-B389B62E7542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A12672-6C95-4C88-B941-B389B62E7542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A12672-6C95-4C88-B941-B389B62E7542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A12672-6C95-4C88-B941-B389B62E7542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F629EB6-7ABD-4AC6-A25B-F6B75FCB59C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F629EB6-7ABD-4AC6-A25B-F6B75FCB59C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F629EB6-7ABD-4AC6-A25B-F6B75FCB59C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F629EB6-7ABD-4AC6-A25B-F6B75FCB59C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5606192B-6895-489F-A865-7F9B99B970A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5606192B-6895-489F-A865-7F9B99B970A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5606192B-6895-489F-A865-7F9B99B970A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5606192B-6895-489F-A865-7F9B99B970A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A37DED0-DDF3-4EDC-93C4-F5F766974265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A37DED0-DDF3-4EDC-93C4-F5F766974265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A37DED0-DDF3-4EDC-93C4-F5F766974265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A37DED0-DDF3-4EDC-93C4-F5F766974265}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DBF167F7-7A6B-443E-BF17-E7D9AD70AFB1} = {1A55D9C6-C224-41DC-8B70-E3013ACA1701}
+		{1D1D4CD9-6291-40B3-9D4F-FE32A807CACB} = {1A55D9C6-C224-41DC-8B70-E3013ACA1701}
+		{76A12672-6C95-4C88-B941-B389B62E7542} = {1A55D9C6-C224-41DC-8B70-E3013ACA1701}
+		{4F629EB6-7ABD-4AC6-A25B-F6B75FCB59C8} = {1A55D9C6-C224-41DC-8B70-E3013ACA1701}
+		{5606192B-6895-489F-A865-7F9B99B970A1} = {1A55D9C6-C224-41DC-8B70-E3013ACA1701}
+		{9A37DED0-DDF3-4EDC-93C4-F5F766974265} = {375C99BF-E97C-4E48-802E-B14546EEF971}
+	EndGlobalSection
+EndGlobal
