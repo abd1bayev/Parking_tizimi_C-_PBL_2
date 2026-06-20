@@ -10,7 +10,7 @@ internal static class DemoDataSeeder
     private const int ZoneCount = 120;
     private const int UserCount = 120;
     private const int ReservationCount = 150;
-    private const int ProblemCount = 105;
+    private const int ProblemCount = 120;
     private const int ClosedSessionCount = 180;
 
     private static readonly string[] Districts =
@@ -315,10 +315,10 @@ internal static class DemoDataSeeder
             var zoneSlots = state.Slots.Where(s => s.ZoneId == zone.Id).OrderBy(s => s.Code).ToList();
             var slotCode = i % 3 == 0 ? null : zoneSlots[i % zoneSlots.Count].Code;
 
-            var status = (i % 10) switch
+            var status = (i % 12) switch
             {
-                0 or 1 => ProblemStatus.Resolved,
-                2 or 3 => ProblemStatus.InProgress,
+                0 => ProblemStatus.Resolved,
+                1 => ProblemStatus.InProgress,
                 _ => ProblemStatus.Open
             };
 

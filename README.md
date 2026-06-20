@@ -300,14 +300,21 @@ dotnet test
 **Variant A — Demo rejim (PBL taqdimoti uchun tavsiya etiladi):**
 
 1. Eski ma'lumot bo'lsa: `rm data/parking-data.json`
-2. `./run-desktop.sh` — avtomatik: 6 hudud, 72 slot, demo foydalanuvchilar
+2. `./run-desktop.sh` — avtomatik katta demo to'plam (har bir turdan 100+):
+   - **120** parking hududi (`P001`–`P120`)
+   - **720+** slot (har hududda 8–16 ta)
+   - **120** foydalanuvchi + admin + 2 operator
+   - **150** bron, **120** muammo xabari, **180** yopilgan sessiya/to'lov
+   - Har hududda alohida **tarif** (soatlik 4000–8750 UZS)
 3. Demo hisoblar:
 
 | Rol | Login | Parol |
 |-----|-------|-------|
 | Admin | `admin` | `Admin123!` |
-| Operator | `operator` | `Operator123!` |
-| User | `demo_user` | `User123!` |
+| Operator | `operator`, `operator2` | `Operator123!` |
+| User | `demo_user`, `user_001` … `user_119` | `User123!` |
+
+> Birinchi ishga tushirish 10–20 soniya davom etishi mumkin (120 ta parol hash).
 
 **Variant B — Qo'lda sozlash:**
 
@@ -380,7 +387,7 @@ dotnet test
 | 3 | Desktop UI (Dashboard, xarita, parking grid) | ✅ Tayyor |
 | 4 | Analitika va hisobotlar (DashboardService) | ✅ Tayyor |
 | 5 | Muammo xabar qilish tizimi | ✅ Tayyor |
-| 6 | Demo ma'lumotlar (72 slot, 6 hudud) | ✅ Tayyor |
+| 6 | Demo ma'lumotlar (120+ hudud, 720+ slot, 120+ user) | ✅ Tayyor |
 | 7 | SQLite migratsiyasi | 📋 Reja |
 | 8 | REST API qatlami | 📋 Reja |
 | 9 | JWT token (web uchun) | 📋 Reja |
