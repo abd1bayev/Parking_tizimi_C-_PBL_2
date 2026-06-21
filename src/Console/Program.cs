@@ -48,8 +48,8 @@ internal sealed class ConsoleApp
 
     public async Task RunAsync()
     {
-        System.Console.WriteLine("=== Parking Tizimi (Console) ===");
-        System.Console.WriteLine("Ketma-ketlik: 1) Admin  2) Operator  3) User  4) Bron  5) Check-in/out");
+        System.Console.WriteLine("=== Park Tizimi (Konsol) ===");
+        System.Console.WriteLine("Ketma-ketlik: 1) Ma'mur  2) Operator  3) Foydalanuvchi  4) Bron  5) Kirish/Chiqish");
         System.Console.WriteLine();
 
         while (true)
@@ -68,11 +68,11 @@ internal sealed class ConsoleApp
     private async Task ShowGuestMenuAsync()
     {
         System.Console.WriteLine("\n--- Mehmon ---");
-        System.Console.WriteLine("1. Birinchi admin yaratish (faqat bir marta)");
-        System.Console.WriteLine("2. Login");
+        System.Console.WriteLine("1. Birinchi ma'mur yaratish (faqat bir marta)");
+        System.Console.WriteLine("2. Kirish");
         if (_app.Auth.HasAdmin())
         {
-            System.Console.WriteLine("3. Ro'yxatdan o'tish (User)");
+            System.Console.WriteLine("3. Ro'yxatdan o'tish (Foydalanuvchi)");
         }
 
         System.Console.WriteLine("0. Chiqish");
@@ -102,21 +102,21 @@ internal sealed class ConsoleApp
     private async Task ShowRoleMenuAsync()
     {
         var user = _app.CurrentUser.CurrentUser!;
-        System.Console.WriteLine($"\n--- {user.Role}: {user.Username} ---");
+        System.Console.WriteLine($"\n--- {UiLabels.Role(user.Role)}: {user.Username} ---");
 
         switch (user.Role)
         {
             case UserRole.Admin:
                 System.Console.WriteLine("1. Operator yaratish");
                 System.Console.WriteLine("2. Barcha foydalanuvchilar");
-                System.Console.WriteLine("3. Slotlar / bronlar / sessiyalar");
+                System.Console.WriteLine("3. Joylar / bronlar / sessiyalar");
                 System.Console.WriteLine("4. Profil");
                 break;
             case UserRole.Operator:
-                System.Console.WriteLine("1. Check-in");
-                System.Console.WriteLine("2. Check-out");
+                System.Console.WriteLine("1. Kirish qilish");
+                System.Console.WriteLine("2. Chiqish qilish");
                 System.Console.WriteLine("3. Faol sessiyalar");
-                System.Console.WriteLine("4. Slotlar");
+                System.Console.WriteLine("4. Park joylari");
                 System.Console.WriteLine("5. Profil");
                 break;
             case UserRole.User:
@@ -128,7 +128,7 @@ internal sealed class ConsoleApp
                 break;
         }
 
-        System.Console.WriteLine("9. Chiqish (logout)");
+        System.Console.WriteLine("9. Hisobdan chiqish");
         System.Console.Write("Tanlov: ");
 
         var choice = System.Console.ReadLine()?.Trim();
@@ -170,7 +170,7 @@ internal sealed class ConsoleApp
 
     private async Task LoginAsync()
     {
-        System.Console.Write("Username: ");
+        System.Console.Write("Foydalanuvchi nomi: ");
         var username = System.Console.ReadLine() ?? string.Empty;
         System.Console.Write("Parol: ");
         var password = ReadPassword();
@@ -199,7 +199,7 @@ internal sealed class ConsoleApp
             case "2":
                 foreach (var u in _app.Query.GetAllUsers())
                 {
-                    System.Console.WriteLine($"  [{u.Role}] {u.Username} — {u.PhoneNumber}");
+                    System.Console.WriteLine($"  [{UiLabels.Role(u.Role)}] {u.Username} — {u.PhoneNumber}");
                 }
                 break;
             case "3":
@@ -220,18 +220,18 @@ internal sealed class ConsoleApp
         switch (choice)
         {
             case "1":
-                System.Console.Write("User ID: ");
+                System.Console.Write("Foydalanuvchi ID: ");
                 Guid.TryParse(System.Console.ReadLine(), out var userId);
-                System.Console.Write("Vehicle ID: ");
+                System.Console.Write("Avtomobil ID: ");
                 Guid.TryParse(System.Console.ReadLine(), out var vehicleId);
-                System.Console.Write("Slot (masalan A1): ");
+                System.Console.Write("Park joyi (masalan P001-A1): ");
                 var slot = System.Console.ReadLine() ?? string.Empty;
                 var checkIn = _app.Operator.CheckIn(operatorId, userId, vehicleId, slot);
                 System.Console.WriteLine(checkIn.Message);
                 if (checkIn.Succeeded) await _app.StateStore.PersistAsync();
                 break;
             case "2":
-                System.Console.Write("Session ID: ");
+                System.Console.Write("Sessiya ID: ");
                 Guid.TryParse(System.Console.ReadLine(), out var sessionId);
                 var checkOut = _app.Operator.CheckOut(operatorId, sessionId);
                 System.Console.WriteLine(checkOut.Message);
@@ -240,13 +240,13 @@ internal sealed class ConsoleApp
             case "3":
                 foreach (var s in _app.Query.GetActiveSessions())
                 {
-                    System.Console.WriteLine($"  Session {s.Id} | User {s.UserId} | Slot {s.SlotId}");
+                    System.Console.WriteLine($"  Sessiya {s.Id} | Foydalanuvchi {s.UserId} | Joy {s.SlotId}");
                 }
                 break;
             case "4":
                 foreach (var slotItem in _app.Query.GetSlots())
                 {
-                    System.Console.WriteLine($"  {slotItem.Code}: {slotItem.Status}");
+                    System.Console.WriteLine($"  {slotItem.Code}: {UiLabels.FormatSlotStatus(slotItem.Status)}");
                 }
                 break;
             case "5":
@@ -275,12 +275,12 @@ internal sealed class ConsoleApp
                 if (vehicle.Succeeded) await _app.StateStore.PersistAsync();
                 break;
             case "2":
-                System.Console.Write("Vehicle ID: ");
+                System.Console.Write("Avtomobil ID: ");
                 Guid.TryParse(System.Console.ReadLine(), out var vehicleId);
                 var zones = _app.Map.GetAllZonesWithAvailability();
                 for (var i = 0; i < zones.Count; i++)
                 {
-                    System.Console.WriteLine($"  {i + 1}. [{zones[i].District}] {zones[i].Name} — bosh: {zones[i].AvailableSlots}/{zones[i].TotalSlots}");
+                    System.Console.WriteLine($"  {i + 1}. [{zones[i].District}] {zones[i].Name} — bo'sh: {zones[i].AvailableSlots}/{zones[i].TotalSlots}");
                 }
                 System.Console.Write("Hudud raqami: ");
                 int.TryParse(System.Console.ReadLine(), out var zoneIndex);
@@ -290,7 +290,7 @@ internal sealed class ConsoleApp
                     break;
                 }
                 var zone = zones[zoneIndex - 1];
-                System.Console.Write("Slot (CHZ-01): ");
+                System.Console.Write("Park joyi (P001-A1): ");
                 var slotCode = System.Console.ReadLine() ?? string.Empty;
                 var from = DateTime.UtcNow.AddHours(1);
                 var to = from.AddHours(2);
@@ -299,7 +299,7 @@ internal sealed class ConsoleApp
                 if (reservation.Succeeded) await _app.StateStore.PersistAsync();
                 break;
             case "3":
-                System.Console.Write("Reservation ID: ");
+                System.Console.Write("Bron ID: ");
                 Guid.TryParse(System.Console.ReadLine(), out var reservationId);
                 var cancel = _app.User.CancelReservation(userId, reservationId);
                 System.Console.WriteLine(cancel.Message);
@@ -308,11 +308,11 @@ internal sealed class ConsoleApp
             case "4":
                 foreach (var v in _app.User.GetUserVehicles(userId))
                 {
-                    System.Console.WriteLine($"  Vehicle {v.Id}: {v.PlateNumber} ({v.Model})");
+                    System.Console.WriteLine($"  Avtomobil {v.Id}: {v.PlateNumber} ({v.Model})");
                 }
                 foreach (var r in _app.User.GetUserReservations(userId))
                 {
-                    System.Console.WriteLine($"  Reservation {r.Id}: slot {r.SlotId}, {r.Status}");
+                    System.Console.WriteLine($"  Bron {r.Id}: joy {r.SlotId}, {UiLabels.FormatReservationStatus(r.Status)}");
                 }
                 break;
             case "5":
@@ -330,9 +330,9 @@ internal sealed class ConsoleApp
         var profile = _app.Profile.GetProfile(userId);
         if (profile.Succeeded && profile.Value is not null)
         {
-            System.Console.WriteLine($"Username: {profile.Value.Username}");
+            System.Console.WriteLine($"Foydalanuvchi nomi: {profile.Value.Username}");
             System.Console.WriteLine($"Telefon: {profile.Value.PhoneNumber}");
-            System.Console.WriteLine($"Rol: {profile.Value.Role}");
+            System.Console.WriteLine($"Rol: {UiLabels.Role(profile.Value.Role)}");
         }
 
         System.Console.Write("Yangi telefon (+998...): ");
@@ -347,14 +347,14 @@ internal sealed class ConsoleApp
 
     private void PrintOverview()
     {
-        System.Console.WriteLine($"Slotlar: {_app.Query.GetSlots().Count}");
+        System.Console.WriteLine($"Park joylari: {_app.Query.GetSlots().Count}");
         System.Console.WriteLine($"Bronlar: {_app.Query.GetAllReservations().Count}");
         System.Console.WriteLine($"Faol sessiyalar: {_app.Query.GetActiveSessions().Count}");
     }
 
     private static RegisterRequest ReadRegisterRequest()
     {
-        System.Console.Write("Username: ");
+        System.Console.Write("Foydalanuvchi nomi: ");
         var username = System.Console.ReadLine() ?? string.Empty;
         System.Console.Write("Parol: ");
         var password = ReadPassword();

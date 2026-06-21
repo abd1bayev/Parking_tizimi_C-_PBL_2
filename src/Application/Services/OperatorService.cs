@@ -21,7 +21,7 @@ public sealed class OperatorService : IOperatorService
     {
         if (!ParkingStateHelper.IsOperator(_stateStore.State, operatorUserId))
         {
-            return OperationResult<ParkingSession>.Failure("Faqat operator check-in qila oladi.");
+            return OperationResult<ParkingSession>.Failure("Faqat operator kirish qilishi mumkin.");
         }
 
         var user = ParkingStateHelper.GetActiveUser(_stateStore.State, userId);
@@ -46,12 +46,12 @@ public sealed class OperatorService : IOperatorService
         var slot = ParkingStateHelper.GetSlotByCode(state, slotCode);
         if (slot is null)
         {
-            return OperationResult<ParkingSession>.Failure("Parking slot topilmadi.");
+            return OperationResult<ParkingSession>.Failure("Park joyi topilmadi.");
         }
 
         if (slot.Status is SlotStatus.Occupied or SlotStatus.OutOfService)
         {
-            return OperationResult<ParkingSession>.Failure("Bu slotga check-in qilib bo'lmaydi.");
+            return OperationResult<ParkingSession>.Failure("Bu park joyiga kirish qilib bo'lmaydi.");
         }
 
         if (slot.Status == SlotStatus.Reserved)
@@ -64,7 +64,7 @@ public sealed class OperatorService : IOperatorService
 
             if (!hasReservation)
             {
-                return OperationResult<ParkingSession>.Failure("Slot boshqa foydalanuvchi uchun bron qilingan.");
+                return OperationResult<ParkingSession>.Failure("Park joyi boshqa foydalanuvchi uchun bron qilingan.");
             }
         }
 
@@ -90,27 +90,27 @@ public sealed class OperatorService : IOperatorService
         state.Sessions.Add(session);
         ParkingStateHelper.RecalculateSlotStatus(state, slot.Id);
 
-        return OperationResult<ParkingSession>.Success(session, "Check-in muvaffaqiyatli bajarildi.");
+        return OperationResult<ParkingSession>.Success(session, "Kirish muvaffaqiyatli bajarildi.");
     }
 
     public OperationResult<Payment> CheckOut(Guid operatorUserId, Guid sessionId)
     {
         if (!ParkingStateHelper.IsOperator(_stateStore.State, operatorUserId))
         {
-            return OperationResult<Payment>.Failure("Faqat operator check-out qila oladi.");
+            return OperationResult<Payment>.Failure("Faqat operator chiqish qilishi mumkin.");
         }
 
         var state = _stateStore.State;
         var session = state.Sessions.FirstOrDefault(candidate => candidate.Id == sessionId && !candidate.IsClosed);
         if (session is null)
         {
-            return OperationResult<Payment>.Failure("Faol parking sessiya topilmadi.");
+            return OperationResult<Payment>.Failure("Faol park sessiyasi topilmadi.");
         }
 
         var slot = state.Slots.FirstOrDefault(candidate => candidate.Id == session.SlotId);
         if (slot is null)
         {
-            return OperationResult<Payment>.Failure("Sessiya uchun slot topilmadi.");
+            return OperationResult<Payment>.Failure("Sessiya uchun park joyi topilmadi.");
         }
 
         var checkoutTime = _clock.UtcNow;
@@ -134,6 +134,6 @@ public sealed class OperatorService : IOperatorService
         state.Payments.Add(payment);
         ParkingStateHelper.RecalculateSlotStatus(state, slot.Id);
 
-        return OperationResult<Payment>.Success(payment, $"Check-out yakunlandi. To'lov: {amount:N0} UZS");
+        return OperationResult<Payment>.Success(payment, $"Chiqish yakunlandi. To'lov: {amount:N0} UZS");
     }
 }

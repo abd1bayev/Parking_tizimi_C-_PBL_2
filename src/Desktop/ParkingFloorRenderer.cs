@@ -57,7 +57,7 @@ internal static class ParkingFloorRenderer
             Spacing = 16,
             Margin = new Thickness(0, 8, 0, 0)
         };
-        legend.Children.Add(CreateLegendItem("Bosh", AvailableBorder));
+        legend.Children.Add(CreateLegendItem("Bo'sh", AvailableBorder));
         legend.Children.Add(CreateLegendItem("Bron", ReservedBorder));
         legend.Children.Add(CreateLegendItem("Band", new SolidColorBrush(Color.Parse("#334155"))));
         legend.Children.Add(CreateLegendItem("Ta'mirda", OutOfServiceBorder));

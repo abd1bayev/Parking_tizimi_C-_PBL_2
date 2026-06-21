@@ -76,7 +76,7 @@ public sealed class UserService : IUserService
         var state = _stateStore.State;
         if (ParkingStateHelper.GetZoneById(state, zoneId) is null)
         {
-            return OperationResult<Reservation>.Failure("Parking hududi topilmadi.");
+            return OperationResult<Reservation>.Failure("Park hududi topilmadi.");
         }
 
         var vehicle = state.Vehicles.FirstOrDefault(candidate =>
@@ -99,12 +99,12 @@ public sealed class UserService : IUserService
         var slot = ParkingStateHelper.GetSlotByCode(state, slotCode, zoneId);
         if (slot is null)
         {
-            return OperationResult<Reservation>.Failure("Parking slot topilmadi.");
+            return OperationResult<Reservation>.Failure("Park joyi topilmadi.");
         }
 
         if (slot.Status is SlotStatus.Occupied or SlotStatus.OutOfService)
         {
-            return OperationResult<Reservation>.Failure("Bu slot hozir bron uchun yaroqsiz.");
+            return OperationResult<Reservation>.Failure("Bu park joyi hozir bron uchun yaroqsiz.");
         }
 
         var hasOverlap = state.Reservations.Any(reservation =>
@@ -115,7 +115,7 @@ public sealed class UserService : IUserService
 
         if (hasOverlap)
         {
-            return OperationResult<Reservation>.Failure("Bu slot ko'rsatilgan vaqtda bron qilingan.");
+            return OperationResult<Reservation>.Failure("Bu park joyi ko'rsatilgan vaqtda bron qilingan.");
         }
 
         var reservation = new Reservation

@@ -140,7 +140,7 @@ public partial class MainWindow : Window
 
         SidebarRoleSubtitle.Text = role switch
         {
-            UserRole.Admin => "Admin paneli",
+            UserRole.Admin => "Ma'mur paneli",
             UserRole.Operator => "Operator paneli",
             UserRole.User => "Foydalanuvchi paneli",
             _ => hasAdmin ? "Mehmon — ko'rish rejimi" : "Birinchi sozlash"
@@ -401,10 +401,10 @@ public partial class MainWindow : Window
 
     private void ApplyAdminDashboard(Application.DTOs.Dashboard.DashboardOverviewDto overview)
     {
-        DashboardTitleText.Text = "Admin Dashboard";
+        DashboardTitleText.Text = "Ma'mur boshqaruv paneli";
         DashboardSubtitleText.Text = "Tizim bo'yicha to'liq statistika va nazorat";
 
-        DashCard1Label.Text = "Band slotlar";
+        DashCard1Label.Text = "Band joylar";
         DashCard2Label.Text = "Bugungi daromad";
         DashCard3Label.Text = "Faol sessiyalar";
         DashCard4Label.Text = "Ochiq muammolar";
@@ -421,10 +421,10 @@ public partial class MainWindow : Window
 
     private void ApplyOperatorDashboard(Application.DTOs.Dashboard.DashboardOverviewDto overview)
     {
-        DashboardTitleText.Text = "Operator Dashboard";
-        DashboardSubtitleText.Text = "Check-in/out va faol parking sessiyalari";
+        DashboardTitleText.Text = "Operator boshqaruv paneli";
+        DashboardSubtitleText.Text = "Kirish/chiqish va faol park sessiyalari";
 
-        DashCard1Label.Text = "Band slotlar";
+        DashCard1Label.Text = "Band joylar";
         DashCard2Label.Text = "Faol sessiyalar";
         DashCard3Label.Text = "Faol bronlar";
         DashCard4Label.Text = "Ochiq muammolar";
@@ -442,16 +442,16 @@ public partial class MainWindow : Window
     private void ApplyUserDashboard(Application.DTOs.Dashboard.DashboardOverviewDto overview, User user)
     {
         DashboardTitleText.Text = "Mening panelim";
-        DashboardSubtitleText.Text = "Bronlar, to'lovlar va bo'sh parking joylari";
+        DashboardSubtitleText.Text = "Bronlar, to'lovlar va bo'sh park joylari";
 
         var payments = _app.User.GetUserPayments(user.Id);
         var reservations = _app.User.GetUserReservations(user.Id)
             .Count(r => r.Status == Domain.Enums.ReservationStatus.Active);
 
-        DashCard1Label.Text = "Bo'sh slotlar";
+        DashCard1Label.Text = "Bo'sh joylar";
         DashCard2Label.Text = "Mening to'lovlarim";
         DashCard3Label.Text = "Faol bronlarim";
-        DashCard4Label.Text = "Band slotlar";
+        DashCard4Label.Text = "Band joylar";
 
         DashOccupiedText.Text = overview.AvailableSlots.ToString();
         DashOccupancyPercentText.Text = $"{overview.TotalZones} ta hudud";
@@ -463,9 +463,9 @@ public partial class MainWindow : Window
         DashFourthHintText.Text = $"{overview.OccupancyPercent}% bandlik";
 
         DashUserActionsTitle.Text = "Tez harakatlar";
-        DashUserActionsText.Text = "Parking joy tanlang, bron qiling yoki avtomobilingizni qo'shing.";
+        DashUserActionsText.Text = "Park joy tanlang, bron qiling yoki avtomobilingizni qo'shing.";
         DashActionPrimaryBtn.Content = "Bron qilish";
-        DashActionSecondaryBtn.Content = "Parking xaritasi";
+        DashActionSecondaryBtn.Content = "Park xaritasi";
         DashActionSecondaryBtn.IsVisible = true;
 
         SetDashboardCardsVisible(showSecond: true, showThird: true, showFourth: true);
@@ -473,12 +473,12 @@ public partial class MainWindow : Window
 
     private void ApplyGuestDashboard(Application.DTOs.Dashboard.DashboardOverviewDto overview)
     {
-        DashboardTitleText.Text = "Parking ko'rinishi";
-        DashboardSubtitleText.Text = "Umumiy bandlik — bron qilish uchun login qiling";
+        DashboardTitleText.Text = "Park ko'rinishi";
+        DashboardSubtitleText.Text = "Umumiy bandlik — bron qilish uchun tizimga kiring";
 
-        DashCard1Label.Text = "Bo'sh slotlar";
-        DashCard2Label.Text = "Jami slotlar";
-        DashCard3Label.Text = "Parking hududlari";
+        DashCard1Label.Text = "Bo'sh joylar";
+        DashCard2Label.Text = "Jami joylar";
+        DashCard3Label.Text = "Park hududlari";
 
         DashOccupiedText.Text = overview.AvailableSlots.ToString();
         DashOccupancyPercentText.Text = $"{overview.OccupancyPercent}% band";
@@ -488,9 +488,9 @@ public partial class MainWindow : Window
         DashThirdHintText.Text = "Toshkent bo'ylab";
 
         DashUserActionsTitle.Text = "Tizimga kiring";
-        DashUserActionsText.Text = "Bron qilish va to'lovlarni ko'rish uchun login qiling yoki ro'yxatdan o'ting.";
-        DashActionPrimaryBtn.Content = "Login";
-        DashActionSecondaryBtn.Content = "Register";
+        DashUserActionsText.Text = "Bron qilish va to'lovlarni ko'rish uchun kiring yoki ro'yxatdan o'ting.";
+        DashActionPrimaryBtn.Content = "Kirish";
+        DashActionSecondaryBtn.Content = "Ro'yxatdan o'tish";
         DashActionSecondaryBtn.IsVisible = _app.Auth.HasAdmin();
 
         SetDashboardCardsVisible(showSecond: true, showThird: true, showFourth: false);
@@ -638,7 +638,7 @@ public partial class MainWindow : Window
         if (isLoggedIn)
         {
             SidebarUserName.Text = user!.Username;
-            SidebarUserEmail.Text = $"{user.Role} · {user.PhoneNumber}";
+            SidebarUserEmail.Text = $"{UiLabels.Role(user.Role)} · {user.PhoneNumber}";
             UserAvatarText.Text = user.Username.Length > 0
                 ? char.ToUpperInvariant(user.Username[0]).ToString()
                 : "?";
@@ -647,7 +647,7 @@ public partial class MainWindow : Window
             if (profile.Succeeded && profile.Value is not null)
             {
                 ProfileInfoText.Text =
-                    $"Username: {profile.Value.Username}\nRol: {profile.Value.Role}\nTelefon: {profile.Value.PhoneNumber}";
+                    $"Foydalanuvchi nomi: {profile.Value.Username}\nRol: {UiLabels.Role(profile.Value.Role)}\nTelefon: {profile.Value.PhoneNumber}";
             }
 
             if (user.Role == UserRole.User)
@@ -704,7 +704,7 @@ public partial class MainWindow : Window
 
         BindZones(_zones);
         SetStatus(_zones.Count == 0
-            ? "Yaqin atrofda parking topilmadi. Radiusni oshiring."
+            ? "Yaqin atrofda park joyi topilmadi. Radiusni oshiring."
             : $"{_zones.Count} ta yaqin hudud topildi.");
         ShowPage("booking");
     }
@@ -720,7 +720,7 @@ public partial class MainWindow : Window
 
         if (zones.Count == 0)
         {
-            ParkingTitleText.Text = "Parking joylar";
+            ParkingTitleText.Text = "Park joylari";
             ParkingSubtitleText.Text = "Hudud topilmadi";
             OccupiedStatText.Text = "0";
             EmptyStatText.Text = "0";
@@ -763,7 +763,7 @@ public partial class MainWindow : Window
     private static string FormatZoneListItem(ZoneAvailabilityDto zone)
     {
         var distance = zone.DistanceKm.HasValue ? $" | {zone.DistanceKm:F1} km" : string.Empty;
-        return $"[{zone.District}] {zone.Name} — Bosh: {zone.AvailableSlots}/{zone.TotalSlots}{distance}";
+        return $"[{zone.District}] {zone.Name} — Bo'sh: {zone.AvailableSlots}/{zone.TotalSlots}{distance}";
     }
 
     private void ZoneListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -811,7 +811,7 @@ public partial class MainWindow : Window
 
         SetStatus(slot.Status switch
         {
-            SlotStatus.Available => $"{slot.Code} — bosh slot. Bron qilish uchun 'Bron' bo'limiga o'ting.",
+            SlotStatus.Available => $"{slot.Code} — bo'sh joy. Bron qilish uchun «Bron» bo'limiga o'ting.",
             SlotStatus.Reserved => $"{slot.Code} — bron qilingan.",
             SlotStatus.Occupied => $"{slot.Code} — band.",
             _ => slot.Code
@@ -906,7 +906,7 @@ public partial class MainWindow : Window
         EmptyStatText.Text = zone.AvailableSlots.ToString();
 
         SelectedZoneDetailText.Text =
-            $"Jami: {zone.TotalSlots} slot | Band: {zone.OccupiedSlots} | Bron: {zone.ReservedSlots} | Bosh: {zone.AvailableSlots}\n" +
+            $"Jami: {zone.TotalSlots} joy | Band: {zone.OccupiedSlots} | Bron: {zone.ReservedSlots} | Bo'sh: {zone.AvailableSlots}\n" +
             $"Tarif: {zone.HourlyRate:N0} UZS/soat" +
             (zone.DistanceKm.HasValue ? $" | Masofa: {zone.DistanceKm:F1} km" : string.Empty);
 
@@ -982,7 +982,7 @@ public partial class MainWindow : Window
     {
         if (_app.CurrentUser.CurrentUser?.Role != UserRole.Admin)
         {
-            SetStatus("Faqat admin operator yarata oladi.");
+            SetStatus("Faqat ma'mur operator yarata oladi.");
             return;
         }
 
@@ -1006,8 +1006,8 @@ public partial class MainWindow : Window
     {
         var zones = _app.Map.GetAllZonesWithAvailability();
         OverviewText.Text =
-            $"Hududlar: {zones.Count} | Slotlar: {_app.Query.GetSlots().Count} | " +
-            $"Bosh slotlar: {zones.Sum(z => z.AvailableSlots)} | " +
+            $"Hududlar: {zones.Count} | Joylar: {_app.Query.GetSlots().Count} | " +
+            $"Bo'sh joylar: {zones.Sum(z => z.AvailableSlots)} | " +
             $"Bronlar: {_app.Query.GetAllReservations().Count}";
     }
 
@@ -1015,7 +1015,7 @@ public partial class MainWindow : Window
     {
         if (_app.CurrentUser.CurrentUser?.Role != UserRole.Operator)
         {
-            SetStatus("Faqat operator check-in qila oladi.");
+            SetStatus("Faqat operator kirish qilishi mumkin.");
             return;
         }
 
@@ -1023,7 +1023,7 @@ public partial class MainWindow : Window
             CheckInVehicleBox.SelectedItem is not VehicleComboItem vehicleItem ||
             CheckInSlotBox.SelectedItem is not SlotComboItem slotItem)
         {
-            SetStatus("Foydalanuvchi, avtomobil va slot tanlang.");
+            SetStatus("Foydalanuvchi, avtomobil va park joyini tanlang.");
             return;
         }
 
@@ -1044,7 +1044,7 @@ public partial class MainWindow : Window
     {
         if (_app.CurrentUser.CurrentUser?.Role != UserRole.Operator)
         {
-            SetStatus("Faqat operator check-out qila oladi.");
+            SetStatus("Faqat operator chiqish qilishi mumkin.");
             return;
         }
 
@@ -1169,7 +1169,7 @@ public partial class MainWindow : Window
         if (ReservationZoneBox.SelectedItem is not ZoneComboItem zoneItem ||
             ReservationSlotBox.SelectedItem is not SlotComboItem slotItem)
         {
-            SetStatus("Hudud va slot tanlang.");
+            SetStatus("Hudud va park joyini tanlang.");
             return;
         }
 
@@ -1220,12 +1220,12 @@ public partial class MainWindow : Window
             {
                 var slot = _app.Query.FindSlot(reservation.SlotId);
                 return new ReservationListItem(reservation.Id,
-                    $"{slot?.Code ?? "?"} | {reservation.Status} | {reservation.ReservedFromUtc:dd.MM HH:mm}");
+                    $"{slot?.Code ?? "?"} | {UiLabels.FormatReservationStatus(reservation.Status)} | {reservation.ReservedFromUtc:dd.MM HH:mm}");
             })
             .ToList();
 
         PaymentsListBox.ItemsSource = _app.User.GetUserPayments(user.Id)
-            .Select(payment => $"{payment.Amount:N0} UZS | {payment.Status} | {payment.PaidAtUtc:dd.MM.yyyy}")
+            .Select(payment => $"{payment.Amount:N0} UZS | {UiLabels.FormatPaymentStatus(payment.Status)} | {payment.PaidAtUtc:dd.MM.yyyy}")
             .ToList();
     }
 
@@ -1258,7 +1258,7 @@ public partial class MainWindow : Window
     private void RefreshTariffs()
     {
         TariffsListBox.ItemsSource = _app.Map.GetAllZonesWithAvailability()
-            .Select(zone => $"[{zone.Code}] {zone.Name} — {zone.HourlyRate:N0} UZS/soat | Bosh: {zone.AvailableSlots}/{zone.TotalSlots} | {zone.Address}")
+            .Select(zone => $"[{zone.Code}] {zone.Name} — {zone.HourlyRate:N0} UZS/soat | Bo'sh: {zone.AvailableSlots}/{zone.TotalSlots} | {zone.Address}")
             .ToList();
     }
 
@@ -1270,7 +1270,7 @@ public partial class MainWindow : Window
             var payments = _app.User.GetUserPayments(user.Id);
             PaymentsSummaryText.Text = $"Sizning to'lovlaringiz: {payments.Count} ta | Jami: {payments.Sum(p => p.Amount):N0} UZS";
             AllPaymentsListBox.ItemsSource = payments
-                .Select(p => $"{p.Amount:N0} UZS | {p.Status} | {p.PaidAtUtc:dd.MM.yyyy HH:mm}")
+                .Select(p => $"{p.Amount:N0} UZS | {UiLabels.FormatPaymentStatus(p.Status)} | {p.PaidAtUtc:dd.MM.yyyy HH:mm}")
                 .ToList();
             return;
         }
@@ -1280,7 +1280,7 @@ public partial class MainWindow : Window
             ? "Barcha to'lovlar (mehmon rejimi — faqat ko'rish)"
             : $"Barcha to'lovlar: {allPayments.Count} ta | Jami: {allPayments.Where(p => p.Status == Domain.Enums.PaymentStatus.Paid).Sum(p => p.Amount):N0} UZS";
         AllPaymentsListBox.ItemsSource = allPayments
-            .Select(p => $"{p.Amount:N0} UZS | {p.Status} | Session: {p.SessionId.ToString()[..8]}...")
+            .Select(p => $"{p.Amount:N0} UZS | {UiLabels.FormatPaymentStatus(p.Status)} | Sessiya: {p.SessionId.ToString()[..8]}...")
             .ToList();
     }
 
@@ -1288,7 +1288,7 @@ public partial class MainWindow : Window
     {
         var overview = _app.Dashboard.GetOverview();
         ReportsSummaryText.Text =
-            $"Hududlar: {overview.TotalZones} | Slotlar: {overview.TotalSlots} | Bandlik: {overview.OccupancyPercent}%\n" +
+            $"Hududlar: {overview.TotalZones} | Joylar: {overview.TotalSlots} | Bandlik: {overview.OccupancyPercent}%\n" +
             $"Faol sessiyalar: {overview.ActiveSessions} | Bronlar: {overview.ActiveReservations} | Ochiq muammolar: {overview.OpenProblems}\n" +
             $"Bugungi daromad: {overview.TodayRevenue:N0} UZS | Jami daromad: {overview.TotalRevenue:N0} UZS";
 
@@ -1333,7 +1333,7 @@ public partial class MainWindow : Window
     private void RefreshUsersPage()
     {
         var items = _app.Query.GetAllUsers()
-            .Select(u => $"[{u.Role}] {u.Username} — {u.PhoneNumber} | {(u.IsActive ? "Faol" : "Nofaol")}")
+            .Select(u => $"[{UiLabels.Role(u.Role)}] {u.Username} — {u.PhoneNumber} | {(u.IsActive ? "Faol" : "Nofaol")}")
             .ToList();
         AllUsersListBox.ItemsSource = items;
         UsersListBox.ItemsSource = items;
@@ -1346,7 +1346,7 @@ public partial class MainWindow : Window
         var admin = _app.CurrentUser.CurrentUser;
         if (admin?.Role != UserRole.Admin)
         {
-            SetStatus("Faqat admin muammoni yopadi.");
+            SetStatus("Faqat ma'mur muammoni yopadi.");
             return;
         }
 
@@ -1379,7 +1379,7 @@ public partial class MainWindow : Window
         var admin = _app.CurrentUser.CurrentUser;
         if (admin?.Role != UserRole.Admin)
         {
-            SetStatus("Faqat admin slot holatini o'zgartira oladi.");
+            SetStatus("Faqat ma'mur park joy holatini o'zgartira oladi.");
             return;
         }
 

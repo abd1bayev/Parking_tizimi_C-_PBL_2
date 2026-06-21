@@ -51,7 +51,7 @@ internal static class DemoDataSeeder
         state.ProblemReports.Clear();
 
         UserRegistration.CreateUser(state, passwordHasher, clock,
-            "admin", "Admin123!", "+998901112233", UserRole.Admin, "Demo admin");
+            "admin", "Admin123!", "+998901112233", UserRole.Admin, "Demo ma'mur");
         UserRegistration.CreateUser(state, passwordHasher, clock,
             "operator", "Operator123!", "+998902223344", UserRole.Operator, "Demo operator");
         UserRegistration.CreateUser(state, passwordHasher, clock,
@@ -74,7 +74,7 @@ internal static class DemoDataSeeder
         var users = new List<User>(UserCount);
 
         UserRegistration.CreateUser(state, passwordHasher, clock,
-            "demo_user", "User123!", "+998903334455", UserRole.User, "Demo user");
+            "demo_user", "User123!", "+998903334455", UserRole.User, "Demo foydalanuvchi");
         users.Add(state.Users.Last(u => u.Username == "demo_user"));
 
         for (var i = 1; i <= UserCount - 1; i++)
@@ -85,7 +85,7 @@ internal static class DemoDataSeeder
             var user = UserRegistration.CreateUser(
                 state, passwordHasher, clock,
                 username, "User123!", phone,
-                UserRole.User, "Demo user").Value!;
+                UserRole.User, "Demo foydalanuvchi").Value!;
             users.Add(user);
         }
 
@@ -133,7 +133,7 @@ internal static class DemoDataSeeder
             var zone = new ParkingZone
             {
                 Code = code,
-                Name = $"{district} parking #{i + 1}",
+                Name = $"{district} park #{i + 1}",
                 District = district,
                 Address = $"{district} tumani, {i + 1}-mavze",
                 Latitude = baseLat + Math.Cos(angle) * radius,
@@ -306,7 +306,7 @@ internal static class DemoDataSeeder
         {
             "Sensor ishlamayapti", "Yoritish yo'q", "Shlagbaum nosoz", "To'lov terminali xato",
             "Yo'l chizig'i o'chgan", "Kamera buzilgan", "Tozalash kerak", "Shovqin",
-            "Yer o'quvchan", "Ventilyatsiya yo'q", "Wi-Fi ishlamaydi", "Display o'chiq"
+            "Yer o'quvchan", "Ventilyatsiya yo'q", "Wi-Fi ishlamaydi", "Ekran o'chiq"
         };
 
         for (var i = 0; i < ProblemCount; i++)

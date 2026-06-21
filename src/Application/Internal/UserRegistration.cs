@@ -21,13 +21,13 @@ internal static class UserRegistration
     {
         if (!InputNormalizer.TryNormalizeRequired(username, out var normalizedUsername))
         {
-            return OperationResult<User>.Failure("Username bo'sh bo'lmasligi kerak.");
+            return OperationResult<User>.Failure("Foydalanuvchi nomi bo'sh bo'lmasligi kerak.");
         }
 
         if (state.Users.Any(user =>
                 string.Equals(user.Username, normalizedUsername, StringComparison.OrdinalIgnoreCase)))
         {
-            return OperationResult<User>.Failure("Bu username band.");
+            return OperationResult<User>.Failure("Bu foydalanuvchi nomi band.");
         }
 
         if (string.IsNullOrWhiteSpace(password) || password.Trim().Length < 6)

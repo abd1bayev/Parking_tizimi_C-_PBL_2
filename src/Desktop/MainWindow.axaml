@@ -50,9 +50,9 @@
                     <StackPanel Margin="10,0,10,12" Spacing="2">
                         <TextBlock x:Name="SectionAsosiyLabel" Text="ASOSIY" FontSize="10" FontWeight="Bold" Foreground="#94A3B8"
                                    Margin="14,0,0,6"/>
-                        <Button x:Name="NavDashboardBtn" Classes="nav-active" Content="  Dashboard"
+                        <Button x:Name="NavDashboardBtn" Classes="nav-active" Content="  Boshqaruv paneli"
                                 Click="NavDashboard_Click"/>
-                        <Button x:Name="NavParkingBtn" Classes="nav" Content="  Parking joylar"
+                        <Button x:Name="NavParkingBtn" Classes="nav" Content="  Park joylari"
                                 Click="NavParking_Click"/>
                         <Button x:Name="NavBookingBtn" Classes="nav" Content="  Bron"
                                 Click="NavBooking_Click"/>
@@ -77,9 +77,9 @@
                                    Margin="14,12,0,6"/>
                         <Button x:Name="NavUsersBtn" Classes="nav" Content="  Foydalanuvchilar" IsVisible="False"
                                 Click="NavUsers_Click"/>
-                        <Button x:Name="NavOperatorBtn" Classes="nav" Content="  Operator" IsVisible="False"
+                        <Button x:Name="NavOperatorBtn" Classes="nav" Content="  Operator paneli" IsVisible="False"
                                 Click="NavOperator_Click"/>
-                        <Button x:Name="NavAdminBtn" Classes="nav" Content="  Admin panel" IsVisible="False"
+                        <Button x:Name="NavAdminBtn" Classes="nav" Content="  Ma'mur paneli" IsVisible="False"
                                 Click="NavAdmin_Click"/>
 
                         <TextBlock x:Name="SectionHisobLabel" Text="HISOB" FontSize="10" FontWeight="Bold" Foreground="#94A3B8"
@@ -88,9 +88,9 @@
                                 Click="NavProfile_Click"/>
                         <Button x:Name="NavSetupBtn" Classes="nav" Content="  Sozlash" IsVisible="False"
                                 Click="NavSetup_Click"/>
-                        <Button x:Name="NavLoginBtn" Classes="nav" Content="  Login"
+                        <Button x:Name="NavLoginBtn" Classes="nav" Content="  Kirish"
                                 Click="NavLogin_Click"/>
-                        <Button x:Name="NavRegisterBtn" Classes="nav" Content="  Register" IsVisible="False"
+                        <Button x:Name="NavRegisterBtn" Classes="nav" Content="  Ro'yxatdan o'tish" IsVisible="False"
                                 Click="NavRegister_Click"/>
                     </StackPanel>
                 </ScrollViewer>
@@ -108,7 +108,7 @@
             <ScrollViewer x:Name="DashboardPage" Grid.Row="1" IsVisible="False" Margin="24">
                 <StackPanel Spacing="20">
                     <StackPanel Spacing="4">
-                        <TextBlock x:Name="DashboardTitleText" Text="Dashboard" FontSize="26"
+                        <TextBlock x:Name="DashboardTitleText" Text="Boshqaruv paneli" FontSize="26"
                                    FontWeight="Bold" Foreground="#0F172A"/>
                         <TextBlock x:Name="DashboardSubtitleText" Text="" Foreground="#64748B" FontSize="13"/>
                     </StackPanel>
@@ -116,7 +116,7 @@
                         <Border x:Name="DashCardOccupied" Background="White" CornerRadius="16" Padding="20"
                                 BorderBrush="#E2E8F0" BorderThickness="1">
                             <StackPanel Spacing="4">
-                                <TextBlock x:Name="DashCard1Label" Text="Band slotlar" Foreground="#64748B" FontSize="12"/>
+                                <TextBlock x:Name="DashCard1Label" Text="Band joylar" Foreground="#64748B" FontSize="12"/>
                                 <TextBlock x:Name="DashOccupiedText" Text="0" FontSize="28" FontWeight="Bold"/>
                                 <TextBlock x:Name="DashOccupancyPercentText" Text="0%" Foreground="#6366F1" FontSize="13"/>
                             </StackPanel>
@@ -203,7 +203,7 @@
                 <Border Grid.Row="0" Background="White" Padding="28,20,28,16">
                     <Grid ColumnDefinitions="*,Auto">
                         <StackPanel Spacing="4">
-                            <TextBlock x:Name="ParkingTitleText" Text="Parking joylar"
+                            <TextBlock x:Name="ParkingTitleText" Text="Park joylari"
                                        FontSize="24" FontWeight="Bold" Foreground="#0F172A"/>
                             <TextBlock x:Name="ParkingSubtitleText" Text="Hudud tanlang"
                                        Foreground="#64748B" FontSize="13"/>
@@ -222,7 +222,7 @@
                                 <TextBlock x:Name="EmptyStatText" Text="0" FontSize="22"
                                            FontWeight="Bold" Foreground="#6366F1"
                                            HorizontalAlignment="Center"/>
-                                <TextBlock Text="Bosh" FontSize="12" Foreground="#64748B"
+                                <TextBlock Text="Bo'sh" FontSize="12" Foreground="#64748B"
                                            HorizontalAlignment="Center"/>
                             </StackPanel>
                             <Button Classes="primary" Content="Muammo xabar qilish"
@@ -257,10 +257,10 @@
                             BorderBrush="#E2E8F0" BorderThickness="1">
                         <StackPanel Spacing="16" VerticalAlignment="Center">
                             <TextBlock Text="Tizimni sozlash" FontSize="28" FontWeight="Bold" Foreground="#0F172A"/>
-                            <TextBlock Text="Parking tizimi birinchi marta ishga tushirilmoqda. Avval bir admin yaratishingiz kerak — u operatorlarni va tizimni boshqaradi."
+                            <TextBlock Text="Park tizimi birinchi marta ishga tushirilmoqda. Avval bir ma'mur yaratishingiz kerak — u operatorlarni va tizimni boshqaradi."
                                        Foreground="#64748B" TextWrapping="Wrap" LineHeight="22"/>
                             <Border Background="#FEF2F2" CornerRadius="12" Padding="14" BorderBrush="#FECACA" BorderThickness="1">
-                                <TextBlock Text="Admin yaratilgunga qadar boshqa foydalanuvchilar ro'yxatdan o'ta olmaydi."
+                                <TextBlock Text="Ma'mur yaratilgunga qadar boshqa foydalanuvchilar ro'yxatdan o'ta olmaydi."
                                            Foreground="#DC2626" TextWrapping="Wrap" FontSize="13"/>
                             </Border>
                         </StackPanel>
@@ -268,12 +268,12 @@
                     <Border Grid.Column="1" Background="White" CornerRadius="20" Padding="32"
                             BorderBrush="#E2E8F0" BorderThickness="1">
                         <StackPanel Spacing="14">
-                            <TextBlock Text="Birinchi admin" FontSize="22" FontWeight="Bold"/>
+                            <TextBlock Text="Birinchi ma'mur" FontSize="22" FontWeight="Bold"/>
                             <TextBlock Text="Ma'mur hisobini yarating" Foreground="#64748B"/>
-                            <TextBox x:Name="AdminUsernameBox" PlaceholderText="Admin username"/>
+                            <TextBox x:Name="AdminUsernameBox" PlaceholderText="Foydalanuvchi nomi"/>
                             <TextBox x:Name="AdminPasswordBox" PlaceholderText="Parol (min 6 belgi)" PasswordChar="*"/>
                             <TextBox x:Name="AdminPhoneBox" PlaceholderText="Telefon (+998XXXXXXXXX)"/>
-                            <Button Classes="primary" Content="Admin yaratish va davom etish"
+                            <Button Classes="primary" Content="Ma'mur yaratish va davom etish"
                                     Click="BootstrapAdmin_Click" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
@@ -293,7 +293,7 @@
                                 <StackPanel Spacing="6">
                                     <TextBlock Text="Demo hisoblar (parol: User123! / Operator123! / Admin123!)"
                                                FontWeight="SemiBold" Foreground="#6366F1" TextWrapping="Wrap"/>
-                                    <TextBlock Text="admin · operator · operator2 · demo_user · aziza_k · jamshid_r · nilufar_s ..."
+                                    <TextBlock Text="admin · operator · operator2 · demo_user · user_001 · user_002 · user_003 ..."
                                                Foreground="#64748B" FontSize="12" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </Border>
@@ -302,9 +302,9 @@
                     <Border Grid.Column="1" Background="White" CornerRadius="20" Padding="32"
                             BorderBrush="#E2E8F0" BorderThickness="1">
                         <StackPanel Spacing="14">
-                            <TextBlock Text="Login" FontSize="22" FontWeight="Bold"/>
+                            <TextBlock Text="Kirish" FontSize="22" FontWeight="Bold"/>
                             <TextBlock Text="Hisobingizga kiring" Foreground="#64748B"/>
-                            <TextBox x:Name="LoginUsernameBox" PlaceholderText="Username"/>
+                            <TextBox x:Name="LoginUsernameBox" PlaceholderText="Foydalanuvchi nomi"/>
                             <TextBox x:Name="LoginPasswordBox" PlaceholderText="Parol" PasswordChar="*"/>
                             <Button Classes="primary" Content="Kirish" Click="LoginButton_Click"
                                     HorizontalAlignment="Stretch"/>
@@ -327,7 +327,7 @@
                             <TextBlock Text="Foydalanuvchi sifatida ro'yxatdan o'ting — avtomobil qo'shing, parking joyini bron qiling va to'lovlarni kuzating."
                                        Foreground="#64748B" TextWrapping="Wrap" LineHeight="22"/>
                             <Border Background="#F0FDF4" CornerRadius="12" Padding="14" BorderBrush="#BBF7D0" BorderThickness="1">
-                                <TextBlock Text="Operator va admin bu yerda ro'yxatdan o'tmaydi. Operatorni admin yaratadi."
+                                <TextBlock Text="Operator va ma'mur bu yerda ro'yxatdan o'tmaydi. Operatorni ma'mur yaratadi."
                                            Foreground="#16A34A" TextWrapping="Wrap" FontSize="13"/>
                             </Border>
                         </StackPanel>
@@ -336,13 +336,13 @@
                             BorderBrush="#E2E8F0" BorderThickness="1">
                         <StackPanel Spacing="14">
                             <TextBlock Text="Yangi hisob" FontSize="22" FontWeight="Bold"/>
-                            <TextBlock Text="Foydalanuvchi (User) roli" Foreground="#64748B"/>
-                            <TextBox x:Name="RegisterUsernameBox" PlaceholderText="Username"/>
+                            <TextBlock Text="Foydalanuvchi roli" Foreground="#64748B"/>
+                            <TextBox x:Name="RegisterUsernameBox" PlaceholderText="Foydalanuvchi nomi"/>
                             <TextBox x:Name="RegisterPasswordBox" PlaceholderText="Parol (min 6 belgi)" PasswordChar="*"/>
                             <TextBox x:Name="RegisterPhoneBox" PlaceholderText="Telefon (+998XXXXXXXXX)"/>
                             <Button Classes="primary" Content="Ro'yxatdan o'tish" Click="RegisterButton_Click"
                                     HorizontalAlignment="Stretch"/>
-                            <Button Content="Allaqachon hisobingiz bormi? Login"
+                            <Button Content="Allaqachon hisobingiz bormi? Kirish"
                                     Click="GoToLogin_Click" HorizontalAlignment="Center"
                                     Background="Transparent" BorderThickness="0"
                                     Foreground="#6366F1" Cursor="Hand"/>
@@ -357,7 +357,7 @@
                     <Border Background="White" CornerRadius="20" Padding="28" Margin="0,0,16,0"
                             BorderBrush="#E2E8F0" BorderThickness="1">
                         <StackPanel Spacing="12">
-                            <TextBlock Text="Yaqin parking qidirish" FontWeight="SemiBold" FontSize="16"/>
+                            <TextBlock Text="Yaqin park joylarini qidirish" FontWeight="SemiBold" FontSize="16"/>
                             <Grid ColumnDefinitions="*,*,Auto,Auto" ColumnSpacing="10">
                                 <TextBox x:Name="SearchLatBox" PlaceholderText="Kenglik (41.2995)" Grid.Column="0"/>
                                 <TextBox x:Name="SearchLngBox" PlaceholderText="Uzunlik (69.2401)" Grid.Column="1"/>
@@ -407,9 +407,9 @@
                 <Border Background="White" CornerRadius="20" Padding="32" MaxWidth="720"
                         BorderBrush="#E2E8F0" BorderThickness="1">
                     <StackPanel Spacing="14">
-                        <TextBlock Text="Admin panel" FontSize="22" FontWeight="Bold"/>
+                        <TextBlock Text="Ma'mur paneli" FontSize="22" FontWeight="Bold"/>
                         <TextBlock Text="Operator yaratish" FontWeight="SemiBold"/>
-                        <TextBox x:Name="OperatorUsernameBox" PlaceholderText="Operator username"/>
+                        <TextBox x:Name="OperatorUsernameBox" PlaceholderText="Operator foydalanuvchi nomi"/>
                         <TextBox x:Name="OperatorPasswordBox" PlaceholderText="Parol" PasswordChar="*"/>
                         <TextBox x:Name="OperatorPhoneBox" PlaceholderText="Telefon"/>
                         <Button Classes="primary" Content="Operator yaratish" Click="CreateOperator_Click"
@@ -421,9 +421,9 @@
                                 HorizontalAlignment="Left"/>
                         <TextBlock x:Name="OverviewText" TextWrapping="Wrap" Foreground="#64748B"/>
                         <Separator Margin="0,8"/>
-                        <TextBlock Text="Slot holati (Admin)" FontWeight="SemiBold"/>
+                        <TextBlock Text="Park joy holati (Ma'mur)" FontWeight="SemiBold"/>
                         <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
-                            <TextBox x:Name="AdminSlotCodeBox" PlaceholderText="Slot (CHZ-A1)" Grid.Column="0"/>
+                            <TextBox x:Name="AdminSlotCodeBox" PlaceholderText="Park joy (P001-A1)" Grid.Column="0"/>
                             <Button Grid.Column="1" Content="Ta'mirda" Click="SetSlotOutOfService_Click"/>
                             <Button Grid.Column="2" Content="Faol qilish" Click="SetSlotAvailable_Click"/>
                         </Grid>
@@ -441,17 +441,17 @@
                 <Border Background="White" CornerRadius="20" Padding="32" MaxWidth="640"
                         BorderBrush="#E2E8F0" BorderThickness="1">
                     <StackPanel Spacing="14">
-                        <TextBlock Text="Operator panel" FontSize="22" FontWeight="Bold"/>
-                        <TextBlock Text="Check-in" FontWeight="SemiBold"/>
+                        <TextBlock Text="Operator paneli" FontSize="22" FontWeight="Bold"/>
+                        <TextBlock Text="Kirish qilish" FontWeight="SemiBold"/>
                         <ComboBox x:Name="CheckInUserBox" PlaceholderText="Foydalanuvchi"/>
                         <ComboBox x:Name="CheckInVehicleBox" PlaceholderText="Avtomobil"/>
-                        <ComboBox x:Name="CheckInSlotBox" PlaceholderText="Slot"/>
-                        <Button Classes="primary" Content="Check-in" Click="CheckIn_Click"
+                        <ComboBox x:Name="CheckInSlotBox" PlaceholderText="Park joyi"/>
+                        <Button Classes="primary" Content="Kirish qilish" Click="CheckIn_Click"
                                 HorizontalAlignment="Left"/>
                         <Separator Margin="0,8"/>
-                        <TextBlock Text="Check-out" FontWeight="SemiBold"/>
+                        <TextBlock Text="Chiqish qilish" FontWeight="SemiBold"/>
                         <ComboBox x:Name="CheckOutSessionBox" PlaceholderText="Faol sessiya"/>
-                        <Button Content="Check-out" Click="CheckOut_Click" HorizontalAlignment="Left"/>
+                        <Button Content="Chiqish qilish" Click="CheckOut_Click" HorizontalAlignment="Left"/>
                         <Button Content="Faol sessiyalar" Click="RefreshSessions_Click"
                                 HorizontalAlignment="Left"/>
                         <ListBox x:Name="SessionsListBox" MaxHeight="180"/>
@@ -483,7 +483,7 @@
                 <Border Background="White" CornerRadius="20" Padding="32" MaxWidth="800"
                         BorderBrush="#E2E8F0" BorderThickness="1">
                     <StackPanel Spacing="14">
-                        <TextBlock Text="Parking tariflari" FontSize="22" FontWeight="Bold"/>
+                        <TextBlock Text="Park tariflari" FontSize="22" FontWeight="Bold"/>
                         <TextBlock Text="Barcha hududlar bo'yicha soatlik narxlar" Foreground="#64748B"/>
                         <ListBox x:Name="TariffsListBox" MinHeight="360"/>
                     </StackPanel>
@@ -540,7 +540,7 @@
                         <Button Content="Ro'yxatni yangilash" Click="RefreshProblemsPage_Click" HorizontalAlignment="Left"/>
                         <ListBox x:Name="AllProblemsListBox" MinHeight="300"/>
                         <Button x:Name="ResolveProblemPageBtn" Classes="primary"
-                                Content="Tanlangan muammoni yopish (Admin)"
+                                Content="Tanlangan muammoni yopish (Ma'mur)"
                                 Click="ResolveProblem_Click" HorizontalAlignment="Left" IsVisible="False"/>
                     </StackPanel>
                 </Border>

@@ -65,7 +65,7 @@ public sealed class ProblemReportService : IProblemReportService
     {
         if (!ParkingStateHelper.IsAdmin(_stateStore.State, adminUserId))
         {
-            return OperationResult.Failure("Faqat admin muammoni yopishi mumkin.");
+            return OperationResult.Failure("Faqat ma'mur muammoni yopishi mumkin.");
         }
 
         var report = _stateStore.State.ProblemReports.FirstOrDefault(candidate => candidate.Id == reportId);
@@ -99,7 +99,7 @@ public sealed class ProblemReportService : IProblemReportService
             Description = report.Description,
             ZoneName = zoneName,
             SlotCode = report.SlotCode,
-            Status = report.Status.ToString(),
+            Status = UiLabels.FormatProblemStatus(report.Status),
             CreatedAtUtc = report.CreatedAtUtc
         };
 }

@@ -26,7 +26,7 @@ public sealed class AuthService : IAuthService
     {
         if (!InputNormalizer.TryNormalizeRequired(request.Username, out var username))
         {
-            return OperationResult<AuthResult>.Failure("Username bo'sh bo'lmasligi kerak.");
+            return OperationResult<AuthResult>.Failure("Foydalanuvchi nomi bo'sh bo'lmasligi kerak.");
         }
 
         var user = _stateStore.State.Users.FirstOrDefault(candidate =>
@@ -34,11 +34,11 @@ public sealed class AuthService : IAuthService
 
         if (user is null || !_passwordHasher.Verify(request.Password, user.PasswordHash))
         {
-            return OperationResult<AuthResult>.Failure("Login yoki parol noto'g'ri.");
+            return OperationResult<AuthResult>.Failure("Kirish nomi yoki parol noto'g'ri.");
         }
 
         return OperationResult<AuthResult>.Success(
-            AuthResult.FromUser(user, "Muvaffaqiyatli login qilindi."));
+            AuthResult.FromUser(user, "Muvaffaqiyatli kirdingiz."));
     }
 
     public OperationResult<AuthResult> Register(RegisterRequest request)
@@ -46,7 +46,7 @@ public sealed class AuthService : IAuthService
         if (!HasAdmin())
         {
             return OperationResult<AuthResult>.Failure(
-                "Avval admin yaratilishi kerak. Admin tizimni boshlaydi.");
+                "Avval ma'mur yaratilishi kerak. Ma'mur tizimni boshlaydi.");
         }
 
         var result = UserRegistration.CreateUser(

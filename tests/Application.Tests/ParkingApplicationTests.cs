@@ -49,7 +49,7 @@ public class ParkingApplicationTests
         });
 
         Assert.False(result.Succeeded);
-        Assert.Contains("admin", result.Message, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("ma'mur", result.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

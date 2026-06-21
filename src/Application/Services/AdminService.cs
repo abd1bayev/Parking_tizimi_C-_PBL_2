@@ -23,7 +23,7 @@ public sealed class AdminService : IAdminService
     {
         if (_stateStore.State.Users.Any(user => user.Role == UserRole.Admin))
         {
-            return OperationResult<AuthResult>.Failure("Admin allaqachon mavjud.");
+            return OperationResult<AuthResult>.Failure("Ma'mur allaqachon mavjud.");
         }
 
         var result = UserRegistration.CreateUser(
@@ -34,7 +34,7 @@ public sealed class AdminService : IAdminService
             request.Password,
             request.PhoneNumber,
             UserRole.Admin,
-            "Admin yaratildi.");
+            "Ma'mur yaratildi.");
 
         return result.Succeeded
             ? OperationResult<AuthResult>.Success(AuthResult.FromUser(result.Value!, result.Message))
@@ -45,7 +45,7 @@ public sealed class AdminService : IAdminService
     {
         if (!ParkingStateHelper.IsAdmin(_stateStore.State, adminUserId))
         {
-            return OperationResult<AuthResult>.Failure("Faqat admin operator yarata oladi.");
+            return OperationResult<AuthResult>.Failure("Faqat ma'mur operator yarata oladi.");
         }
 
         var result = UserRegistration.CreateUser(
@@ -67,24 +67,24 @@ public sealed class AdminService : IAdminService
     {
         if (!ParkingStateHelper.IsAdmin(_stateStore.State, adminUserId))
         {
-            return OperationResult.Failure("Faqat admin slot holatini o'zgartira oladi.");
+            return OperationResult.Failure("Faqat ma'mur park joy holatini o'zgartira oladi.");
         }
 
         if (status is not (SlotStatus.Available or SlotStatus.OutOfService))
         {
-            return OperationResult.Failure("Faqat Available yoki OutOfService holatlari qo'llab-quvvatlanadi.");
+            return OperationResult.Failure("Faqat «Bo'sh» yoki «Ta'mirda» holatlari qo'llab-quvvatlanadi.");
         }
 
         var slot = ParkingStateHelper.GetSlotByCode(_stateStore.State, slotCode);
         if (slot is null)
         {
-            return OperationResult.Failure("Slot topilmadi.");
+            return OperationResult.Failure("Park joyi topilmadi.");
         }
 
         if (status == SlotStatus.OutOfService &&
             _stateStore.State.Sessions.Any(session => session.SlotId == slot.Id && !session.IsClosed))
         {
-            return OperationResult.Failure("Band slotni OutOfService qilib bo'lmaydi.");
+            return OperationResult.Failure("Band park joyini ta'mir holatiga o'tkazib bo'lmaydi.");
         }
 
         slot.Status = status;
@@ -93,6 +93,6 @@ public sealed class AdminService : IAdminService
             ParkingStateHelper.RecalculateSlotStatus(_stateStore.State, slot.Id);
         }
 
-        return OperationResult.Success($"Slot {slot.Code} holati yangilandi: {status}.");
+        return OperationResult.Success($"Park joyi {slot.Code} holati yangilandi: {UiLabels.FormatSlotStatus(status)}.");
     }
 }
